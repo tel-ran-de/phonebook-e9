@@ -75,7 +75,7 @@
 }
 
 .form-button {
-  background: #007AFF;
+  background-color: #007AFF;
   border: none;
   border-radius: 10px;
   padding: 10px 0;
@@ -86,6 +86,11 @@
 }
 .form-button:hover {
   background: #258DFF;
+}
+.form-button a {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 /*# sourceMappingURL=register-page.component.css.map */
