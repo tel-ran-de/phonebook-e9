@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "phonebook-ui"
+    }
+  },
+  "defaultProject": "phonebook-ui",
+  "cli": {
+    "analytics": "5ffa379d-bcc4-413c-ba52-a2c2cbbfd4b5"
+  }
 }
