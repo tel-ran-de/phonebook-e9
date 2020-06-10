@@ -19,15 +19,14 @@ public class Email {
 
     @Setter
     private String email;
-
     @Setter
-    private EmailType type;
+    private Enum<EmailType> type;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Contact contact;
 
-    public Email(Contact contact, String email, EmailType type) {
+    public Email(Contact contact, String email, Enum<EmailType> type) {
         this.contact = contact;
         this.email = email;
         this.type = type;

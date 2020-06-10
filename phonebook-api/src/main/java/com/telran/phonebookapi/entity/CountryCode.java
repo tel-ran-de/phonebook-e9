@@ -1,11 +1,11 @@
 package com.telran.phonebookapi.entity;
 
 public enum CountryCode {
-    USA ("+1", "Usa"),
-    RUSSIA ("+7", "Russia"),
-    GERMANY ("+49", "Germany"),
-    UKRAINE ("+380", "Ukraine"),
-    BULGARIA ("+359", "Bulgaria");
+    USA ("1", "Usa"),
+    RUSSIA ("7", "Russia"),
+    GERMANY ("49", "Germany"),
+    UKRAINE ("380", "Ukraine"),
+    BULGARIA ("359", "Bulgaria");
 
     private final String code;
     private final String country;
