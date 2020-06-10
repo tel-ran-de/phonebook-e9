@@ -1,0 +1,51 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="OnSubmit()"
+>
+  <div class="auth-form">
+    <span class="form-title">Login</span>
+    <div class="form-input-block">
+      <p *ngIf="form.get('email').invalid && form.get('email').touched" class="message">{{message.INVALID_EMAIL_ADDRESS}}</p>
+      <div class="wrapper">
+        <span class="material-icons icon">email</span>
+        <input
+          formControlName="email"
+          class="form-input"
+          id="email"
+          type="email"
+          placeholder="Email"
+        >
+      </div>
+    </div>
+    <div class="form-input-block">
+      <p *ngIf="form.get('password').invalid && form.get('password').touched && form.get('password').errors['required']" class="message">
+        {{message.INVALID_PASSWORD}}
+      </p>
+      <p *ngIf="form.get('password').invalid && form.get('password').touched && form.get('password').errors['minlength'] && form.get('password').errors['minlength']['requiredLength']" class="message">
+        the password is too short, {{8 - form.get('password').errors['minlength']['actualLength']}} more
+      </p>
+      <div class="wrapper">
+        <span class="material-icons icon">lock</span>
+        <input
+          formControlName="password"
+          class="form-input"
+          id="password"
+          type="password"
+          placeholder="Password"
+        >
+      </div>
+    </div>
+    <div class="form-action">
+      <button
+        type="submit"
+        class="form-button"
+        [disabled]="!form.valid"
+      >
+        <span *ngIf="form.enabled">Login</span>
+        <span *ngIf="form.disabled">Loading...</span>
+      </button>
+      <span><a *ngIf="form.enabled" routerLink="/reset-password">Forgot your password?</a></span>
+    </div>
+  </div>
+</form>
+
