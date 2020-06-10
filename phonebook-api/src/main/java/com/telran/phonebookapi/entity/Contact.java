@@ -33,15 +33,12 @@ public class Contact {
     private User user;
 
     @OneToMany(mappedBy = "contact")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Phone> phoneNumbers = new ArrayList<>();
 
     @OneToMany(mappedBy = "contact")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Address> addresses = new ArrayList<>();
 
     @OneToMany(mappedBy = "contact")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Email> emails = new ArrayList<>();
 
     public Contact(String name, String lastName, User user) {
@@ -60,6 +57,18 @@ public class Contact {
 
     public List<Email> getEmails() {
         return Collections.unmodifiableList(emails);
+    }
+
+    public void addPhoneNumber(Phone phoneNumber) {
+        phoneNumbers.add(phoneNumber);
+    }
+
+    public void addAddress (Address address) {
+        addresses.add(address);
+    }
+
+    public void addEmail (Email email) {
+        emails.add(email);
     }
 
 }

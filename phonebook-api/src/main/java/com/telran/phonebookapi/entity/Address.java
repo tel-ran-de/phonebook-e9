@@ -25,19 +25,15 @@ public class Address {
     private String country;
     @Setter
     private String address;
-
+    @Setter
     private Enum<Type> type;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Contact contact;
 
-    public Address(Contact contact, int zipCode, String country, String city, String address, Enum<Type> type) {
+    public Address(Contact contact, Enum<Type> type) {
         this.contact = contact;
-        this.zipCode = zipCode;
-        this.country  = country;
-        this.city = city;
-        this.address = address;
         this.type = type;
     }
 

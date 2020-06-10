@@ -19,8 +19,9 @@ public class Phone {
 
     @Setter
     private String number;
-
+    @Setter
     private Enum<CountryCode> codeCountry;
+    @Setter
     private Enum<Type> type;
 
     @ManyToOne

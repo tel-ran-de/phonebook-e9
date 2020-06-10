@@ -4,7 +4,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-//import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -30,20 +29,19 @@ public class User {
     @Setter
     private String lastName;
 
+    @Setter
+    private String password;
+
     @OneToMany(mappedBy = "user")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Contact> contacts = new ArrayList<>();
 
-    public User(String email, String name, String lastName) {
+    public User(String email, String password) {
         this.email = email;
-        this.name = name;
-        this.lastName = lastName;
+        this.password = password;
     }
 
     public List<Contact> getContact() {
         return Collections.unmodifiableList(contacts);
     }
-
-
 }
 

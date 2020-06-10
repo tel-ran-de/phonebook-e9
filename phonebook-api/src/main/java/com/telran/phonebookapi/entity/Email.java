@@ -19,7 +19,7 @@ public class Email {
 
     @Setter
     private String email;
-
+    @Setter
     private Enum<Type> type;
 
     @ManyToOne
