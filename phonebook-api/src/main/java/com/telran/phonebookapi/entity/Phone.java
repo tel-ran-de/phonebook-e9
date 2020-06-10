@@ -22,13 +22,13 @@ public class Phone {
     @Setter
     private Enum<CountryCode> codeCountry;
     @Setter
-    private Enum<Type> type;
+    private Enum<PhoneType> type;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Contact contact;
 
-    public Phone(Contact contact, Enum<CountryCode> codeCountry, String number, Enum<Type> type) {
+    public Phone(Contact contact, Enum<CountryCode> codeCountry, String number, Enum<PhoneType> type) {
         this.contact = contact;
         this.codeCountry = codeCountry;
         this.number = number;
