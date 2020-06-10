@@ -19,6 +19,7 @@ public class Email {
 
     @Setter
     private String email;
+
     @Setter
     private EmailType type;
 
