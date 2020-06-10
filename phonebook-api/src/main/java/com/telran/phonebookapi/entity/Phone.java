@@ -20,15 +20,15 @@ public class Phone {
     @Setter
     private String number;
     @Setter
-    private Enum<CountryCode> codeCountry;
+    private CountryCode codeCountry;
     @Setter
-    private Enum<PhoneType> type;
+    private PhoneType type;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Contact contact;
 
-    public Phone(Contact contact, Enum<CountryCode> codeCountry, String number, Enum<PhoneType> type) {
+    public Phone(Contact contact, CountryCode codeCountry, String number, PhoneType type) {
         this.contact = contact;
         this.codeCountry = codeCountry;
         this.number = number;

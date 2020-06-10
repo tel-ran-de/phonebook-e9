@@ -26,13 +26,13 @@ public class Address {
     @Setter
     private String address;
     @Setter
-    private Enum<AddressType> type;
+    private AddressType type;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Contact contact;
 
-    public Address(Contact contact, Enum<AddressType> type) {
+    public Address(Contact contact, AddressType type) {
         this.contact = contact;
         this.type = type;
     }

@@ -26,7 +26,7 @@ public class Contact {
     @Setter
     private String lastName;
 
-    private Enum<ContactType> type;
+    private ContactType type;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
