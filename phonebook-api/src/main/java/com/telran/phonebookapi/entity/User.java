@@ -1,26 +1,15 @@
 package com.telran.phonebookapi.entity;
 
-import lombok.*;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Getter
-@NoArgsConstructor
-@Entity(name = "Users")
-public class User {
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 
 @Entity
 @NoArgsConstructor
@@ -47,9 +36,6 @@ public class User {
     @Setter
     private String lastName;
 
-    @Setter
-    private String password;
-
     @OneToMany(mappedBy = "user")
     private List<Contact> contacts = new ArrayList<>();
 
@@ -59,11 +45,8 @@ public class User {
         userRole = UserRole.USER;
         enabled = false;
     }
-}
-    }
 
     public List<Contact> getContact() {
         return Collections.unmodifiableList(contacts);
     }
 }
-

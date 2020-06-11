@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
         final SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(userMail);
         mailMessage.setSubject("Mail Confirmation Link!");
-        mailMessage.setFrom("<wladimir.kuhn.berlin@gmail.com>");
+        mailMessage.setFrom("<EMAIL>");
         mailMessage.setText(
                 "Thank you for your registration. Please click on the below link to activate your account. " + "http://localhost:8080/api/v1/confirmation?token="
                         + token);

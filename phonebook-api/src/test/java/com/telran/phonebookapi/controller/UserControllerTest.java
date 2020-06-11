@@ -14,7 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -22,7 +21,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(UserController.class)
@@ -37,7 +35,7 @@ class UserControllerTest {
     private ConfirmationTokenService tokenService;
 
     @Test
-    public void testCreate_newUser_returnsOk() throws Exception {
+    public void testCreate_returnsOk() throws Exception {
         mvc.perform(post("/api/v1/registration")
                 .content("{\"email\": \"ivan@mail.com\",\"password\":\"pet8rov34j\"}")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -48,8 +46,42 @@ class UserControllerTest {
     }
 
     @Test
+    public void testCreate_shortPassword_returns400() throws Exception {
+        mvc.perform(post("/api/v1/registration")
+                .content("{\"email\": \"ivan@mail.com\",\"password\":\"pet\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        verify(service, never()).create(any());
+    }
+
+    @Test
+    public void testCreate_longPassword_returns400() throws Exception {
+        mvc.perform(post("/api/v1/registration")
+                .content("{\"email\": \"ivan@mail.com\",\"password\":\"pesdfdfdgdgfgfgfhfhgfhfght\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        verify(service, never()).create(any());
+    }
+
+    @Test
+    public void testCreate_notValidEmail_returns400() throws Exception {
+        mvc.perform(post("/api/v1/registration")
+                .content("{\"email\": \"ivanmail.com\",\"password\":\"pegfhfhgfhfght\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        verify(service, never()).create(any());
+    }
+
+    @Test
     public void testConfirm_validToken_returnsOk() throws Exception {
-        ConfirmationToken token = new ConfirmationToken(1L, "1500000", LocalDate.now(), new User("anna@gmail.com", "lkjsdfwe2ex"));
+        User user = new User("anna@gmail.com", "dfdfdfgfgsr");
+        ConfirmationToken token = new ConfirmationToken(user);
 
         when(tokenService.findByToken("1500000"))
                 .thenReturn(Optional.of(token));
@@ -57,7 +89,7 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(tokenService, times(1)).findByToken("1500000");
-        verify(service, times(1)).confirmUser(tokenService.findByToken("1500000").get());
+        verify(tokenService, times(1)).findByToken(any());
+        verify(service, times(1)).confirmUser(any());
     }
 }

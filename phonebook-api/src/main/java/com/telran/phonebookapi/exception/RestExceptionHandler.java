@@ -11,8 +11,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({UserAlreadyExistsException.class, TokenNotFoundException.class})
-    protected ResponseEntity<Object> handleNotFound(Exception ex,
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    protected ResponseEntity<Object> handleBadRequest(Exception ex,
                                                     WebRequest request) {
 
         return handleExceptionInternal(ex,
@@ -21,5 +21,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 request);
     }
-}
 
+    @ExceptionHandler(TokenNotFoundException.class)
+    protected ResponseEntity<Object> handleNotFound(Exception ex,
+                                                    WebRequest request) {
+
+        return handleExceptionInternal(ex,
+                ex.getMessage(),
+                new HttpHeaders(),
+                HttpStatus.NOT_FOUND,
+                request);
+    }
+}

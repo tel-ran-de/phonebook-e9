@@ -11,8 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.time.LocalDate;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -35,7 +33,7 @@ class UserServiceTest {
     @Test
     public void testCreate_newUser_returnsOk() {
         User user = new User("anna@gmail.com", "kjkjsdfsdfdf");
-        ConfirmationToken token = new ConfirmationToken(1L, "1500000", LocalDate.now(), new User("anna@gmail.com", "lkjsdfwe2ex"));
+        ConfirmationToken token = new ConfirmationToken(user);
         userRepository.save(user);
         confirmationTokenService.save(token);
 
@@ -47,7 +45,7 @@ class UserServiceTest {
     public void testConfirm_validToken_returnsOk() {
         User user = new User("anna@gmail.com", "kjkjsdfsdfdf");
         user.setEnabled(true);
-        ConfirmationToken token = new ConfirmationToken(1L, "1500000", LocalDate.now(), new User("anna@gmail.com", "lkjsdfwe2ex"));
+        ConfirmationToken token = new ConfirmationToken(user);
         userRepository.save(user);
         confirmationTokenService.delete(token.getId());
 
