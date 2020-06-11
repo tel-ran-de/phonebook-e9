@@ -1,11 +1,8 @@
 <div class="auth-info">
-  <span class="info-title">Success</span>
+  <span class="info-title">Email Confirmation </span>
   <div class="message">
-    Your email was successfully confirmed!
+    {{confirmMessage}}
   </div>
-  <button
-    class="link-button"
-  >
-    <a href="/login"><span>to Login</span></a>
-  </button>
+  <button class="link-button" routerLink="/login" *ngIf="!errorStat"> Go to Login</button>
+  <button class="link-button" routerLink="/login" *ngIf="errorStat"> Go to registration</button>
 </div>
