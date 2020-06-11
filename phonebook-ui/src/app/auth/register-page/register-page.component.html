@@ -1,64 +1,42 @@
-<form
-  [formGroup]="form"
-  (ngSubmit)="OnSubmit()"
->
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="auth-form">
     <span class="form-title">Registration</span>
     <div class="form-input-block">
-      <p *ngIf="form.get('email').invalid && form.get('email').touched" class="message">{{message.INVALID_EMAIL_ADDRESS}}</p>
-      <div class="wrapper">
-        <span class="material-icons icon">email</span>
-        <input
-          formControlName="email"
-          class="form-input"
-          id="email"
-          type="email"
-          placeholder="Email"
-        >
+      <label for="email"></label>
+      <span class="material-icons icon">email</span>
+      <input id="email" class="form-input" formControlName="email" placeholder="email..." name="email"/>
+      <div class="wrapper" *ngIf="submitted && f.email.errors">
+        <div class="message" *ngIf="f.email.errors.required">Email is required</div>
+        <div class="message" *ngIf="f.email.errors.pattern"> Invalid email</div>
       </div>
     </div>
     <div class="form-input-block">
-      <p *ngIf="form.get('password').invalid && form.get('password').touched && form.get('password').errors['required']" class="message">
-        {{message.INVALID_PASSWORD}}
-      </p>
-      <p *ngIf="form.get('password').invalid && form.get('password').touched && form.get('password').errors['minlength'] && form.get('password').errors['minlength']['requiredLength']" class="message">
-        the password is too short, {{8 - form.get('password').errors['minlength']['actualLength']}} more
-      </p>
-      <div class="wrapper">
-        <span class="material-icons icon">lock</span>
-        <input
-          formControlName="password"
-          class="form-input"
-          id="password"
-          type="password"
-          placeholder="Password"
-        >
+      <label for="password"></label>
+      <span class="material-icons icon">lock</span>
+      <input class="form-input" formControlName="password" id="password"
+             type="password" placeholder="password... min 8, max 20" name="password"/>
+      <div class="wrapper" *ngIf="submitted && f.password.errors">
+        <div class="message" *ngIf="f.password.errors.required">Password is required</div>
+        <div class="message" *ngIf="f.password.errors.minlength">Password must be at least 8 characters</div>
+        <div class="message" *ngIf="f.password.errors.maxlength">Password must not be greater than 20 characters</div>
       </div>
     </div>
     <div class="form-input-block">
-      <p *ngIf="form.get('name').invalid && form.get('name').touched && form.get('name').errors['required']" class="message">
-        {{message.INVALID_NAME}}
-      </p>
-      <div class="wrapper">
-        <span class="material-icons icon">person</span>
-        <input
-          formControlName="name"
-          class="form-input"
-          id="name"
-          type="text"
-          placeholder="Name"
-        >
+      <label for="passwordConfirm"></label>
+      <span class="material-icons icon">lock</span>
+      <input id="passwordConfirm" class="form-input" type="password" formControlName="passwordConfirm"
+             placeholder="password confirm"/>
+      <div class="wrapper" *ngIf="submitted">
+        <div class="message" *ngIf="checkPasswords(form)"> Password not equals</div>
       </div>
     </div>
     <div class="form-action">
-      <button
-        type="submit"
-        class="form-button"
-        [disabled]="!form.valid"
-      >
-        <a href="/confirmation"><span *ngIf="form.enabled">Create an account</span></a>
-        <span *ngIf="form.disabled">Loading...</span>
-      </button>
+      <div class="wrapper" *ngIf="submitted">
+        <div class="message" *ngIf="errorMessage">{{errorMessage}}</div>
+      </div>
+      <button class="form-button" [disabled]="loading" type="submit">
+        <span *ngIf="!loading">Register</span>
+        <span *ngIf="loading">Loading ...</span></button>
       <span><a *ngIf="form.enabled" routerLink="/login">Already registered with us?</a></span>
     </div>
   </div>
