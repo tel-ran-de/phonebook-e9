@@ -84,12 +84,11 @@ class UserControllerTest {
         ConfirmationToken token = new ConfirmationToken(user);
 
         when(tokenService.findByToken("1500000"))
-                .thenReturn(Optional.of(token));
+                .thenReturn(token);
         mvc.perform(get("/api/v1/confirmation?token=1500000")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(tokenService, times(1)).findByToken(any());
         verify(service, times(1)).confirmUser(any());
     }
 }

@@ -30,6 +30,7 @@ class ConfirmationTokenRepositoryTest {
         entityManager.persist(user);
         entityManager.persist(token);
         entityManager.flush();
+        entityManager.clear();
 
         Optional<ConfirmationToken> tokenFromDb = tokenRepository.findByToken(token.getToken());
         assertEquals(token.getToken(), tokenFromDb.get().getToken());
@@ -44,6 +45,7 @@ class ConfirmationTokenRepositoryTest {
         entityManager.persist(user);
         entityManager.persist(token);
         entityManager.flush();
+        entityManager.clear();
 
         Optional<ConfirmationToken> tokenFromDb = tokenRepository.findByToken("1500000");
         assertEquals(Optional.empty(), tokenFromDb);

@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
             entityManager.persist(user);
             entityManager.flush();
+            entityManager.clear();
 
             User userFromDb = userRepository.findByEmail("anna@gmail.com").get();
             assertEquals("anna@gmail.com", userFromDb.getEmail());
@@ -39,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
             entityManager.persist(user);
             entityManager.flush();
+            entityManager.clear();
 
             Optional<User> userFromDb = userRepository.findByEmail("john@gmail.com");
             assertEquals(Optional.empty(), userFromDb);

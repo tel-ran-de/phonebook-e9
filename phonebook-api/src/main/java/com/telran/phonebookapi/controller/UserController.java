@@ -26,9 +26,7 @@ public class UserController {
 
     @GetMapping("api/v1/confirmation")
     public void confirm(@RequestParam(name = "token") String token) throws TokenNotFoundException {
-        ConfirmationToken confirmationToken = confirmationTokenService.findByToken(token)
-                .orElseThrow(() -> new TokenNotFoundException("Token not found"));
-        userService.confirmUser(confirmationToken);
+        userService.confirmUser(token);
     }
 }
 

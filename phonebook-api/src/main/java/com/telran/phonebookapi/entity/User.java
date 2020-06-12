@@ -11,14 +11,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Entity
+@Entity(name = "Users")
 @NoArgsConstructor
 @Getter
 public class User {
-
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
 
     @Id
     private String email;
