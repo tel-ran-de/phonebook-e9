@@ -1,0 +1,8 @@
+<div class="auth-info">
+  <span class="info-title">Email Confirmation </span>
+  <div class="message">
+    {{confirmMessage}}
+  </div>
+  <button class="link-button" routerLink="/login" *ngIf="!errorStat"> Go to Login</button>
+  <button class="link-button" routerLink="/login" *ngIf="errorStat"> Go to registration</button>
+</div>
