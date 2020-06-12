@@ -124,6 +124,11 @@
   },
   "defaultProject": "phonebook-ui",
   "cli": {
-    "analytics": "7bd1d151-8519-408b-833e-f9e70b72315d"
+    "analytics": false
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "sass"
+    }
   }
 }
