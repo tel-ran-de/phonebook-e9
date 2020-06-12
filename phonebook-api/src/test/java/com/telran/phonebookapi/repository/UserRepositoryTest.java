@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         TestEntityManager entityManager;
 
         @Test
-        @Transactional
         public void testFindByEmail_oneUserInDb_oneFound() {
             User user = new User("anna@gmail.com", "sdfafdfdfrdf");
 
@@ -29,12 +28,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
             entityManager.flush();
             entityManager.clear();
 
-            User userFromDb = userRepository.findByEmail("anna@gmail.com").get();
+            User userFromDb = userRepository.findById("anna@gmail.com").get();
             assertEquals("anna@gmail.com", userFromDb.getEmail());
         }
 
         @Test
-        @Transactional
         public void testFindByEmail_oneUserInDb_notFound() {
             User user = new User("anna@gmail.com", "sdfafdfdfrdf");
 
@@ -42,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
             entityManager.flush();
             entityManager.clear();
 
-            Optional<User> userFromDb = userRepository.findByEmail("john@gmail.com");
+            Optional<User> userFromDb = userRepository.findById("john@gmail.com");
             assertEquals(Optional.empty(), userFromDb);
         }
 }

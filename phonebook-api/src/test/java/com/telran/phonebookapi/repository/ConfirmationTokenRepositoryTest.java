@@ -22,7 +22,6 @@ class ConfirmationTokenRepositoryTest {
     TestEntityManager entityManager;
 
     @Test
-    @Transactional
     public void testFindByToken_oneTokenInDb_oneFound() {
         User user = new User("anna@gmail.com", "sdfafdfdfrdf");
         ConfirmationToken token = new ConfirmationToken(user);
@@ -37,7 +36,6 @@ class ConfirmationTokenRepositoryTest {
     }
 
     @Test
-    @Transactional
     public void testFindByToken_oneTokenInDb_notFound() {
         User user = new User("anna@gmail.com", "sdfafdfdfrdf");
         ConfirmationToken token = new ConfirmationToken(user);

@@ -68,6 +68,17 @@ class UserControllerTest {
     }
 
     @Test
+    public void testCreate_notValidEmailSecondPart_returns400() throws Exception {
+        mvc.perform(post("/api/v1/registration")
+                .content("{\"email\": \"ivan@mailcom\",\"password\":\"pegfhfhgfhfght\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        verify(service, never()).create(any());
+    }
+
+    @Test
     public void testCreate_notValidEmail_returns400() throws Exception {
         mvc.perform(post("/api/v1/registration")
                 .content("{\"email\": \"ivanmail.com\",\"password\":\"pegfhfhgfhfght\"}")

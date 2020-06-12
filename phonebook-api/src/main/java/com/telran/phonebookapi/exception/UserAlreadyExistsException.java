@@ -1,7 +1,14 @@
 package com.telran.phonebookapi.exception;
 
-public class UserAlreadyExistsException extends Exception {
-    public UserAlreadyExistsException(String message) {
-        super(message);
+import lombok.Getter;
+
+public class UserAlreadyExistsException extends RuntimeException {
+
+    @Getter
+    private final String email;
+
+    public UserAlreadyExistsException(String email) {
+        super("User already exists.");
+        this.email = email;
     }
 }

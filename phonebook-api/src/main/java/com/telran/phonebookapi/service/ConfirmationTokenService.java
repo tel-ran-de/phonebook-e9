@@ -20,7 +20,7 @@ public class ConfirmationTokenService {
         confirmationTokenRepository.deleteById(id);
     }
 
-    public ConfirmationToken findByToken(String token) throws TokenNotFoundException {
-        return confirmationTokenRepository.findByToken(token).orElseThrow(() -> new TokenNotFoundException("Token not found"));
+    public ConfirmationToken findByToken(String token) {
+        return confirmationTokenRepository.findByToken(token).orElseThrow(TokenNotFoundException::new);
     }
 }

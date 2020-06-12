@@ -1,7 +1,8 @@
 package com.telran.phonebookapi.exception;
 
-public class TokenNotFoundException extends Exception {
-    public TokenNotFoundException(String message) {
-        super(message);
+public class TokenNotFoundException extends RuntimeException {
+
+    public TokenNotFoundException() {
+        super("Token not found.");
     }
 }
