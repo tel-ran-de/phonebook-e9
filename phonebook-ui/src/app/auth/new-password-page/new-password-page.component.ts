@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {AuthMessages} from "../../common/messages/auth-messages";
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AuthMessage} from "../../common/message/auth-message";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {AuthService} from "../../common/service/auth.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-new-password-page',
@@ -9,10 +12,18 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class NewPasswordPageComponent implements OnInit {
 
-  constructor(private authMessages: AuthMessages) { }
+  constructor(private auth: AuthService,
+              private router: Router,
+              private route: ActivatedRoute,
+              private authMessages: AuthMessage
+  ) {
+  }
 
   form: FormGroup
-  message = this.authMessages
+  aSub: Subscription
+  message: string = this.authMessages.INVALID_PASSWORD
+  classes: string = 'auth-form animate__animated animate__zoomIn'
+  passwordMustMatch: string = this.authMessages.PASSWORDS_MUST_MATCH
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -21,8 +32,24 @@ export class NewPasswordPageComponent implements OnInit {
     })
   }
 
-  OnSubmit() {
+  ngOnDestroy() {
+    if (this.aSub) {
+      this.aSub.unsubscribe()
+    }
+  }
 
+  onSubmit() {
+    if (this.form.valid && (this.form.get('password').value === this.form.get('confirmPassword').value)) {
+      this.form.disable()
+      this.auth.sendNewPassword(this.form.value, this.route.snapshot.queryParams.token).subscribe(
+        () => this.router.navigate(['/update-password-success']),
+        error => {
+          this.classes = 'auth-form  animate__animated animate__wobble'
+          this.form.reset()
+          this.form.enable()
+        }
+      )
+    }
   }
 
 }

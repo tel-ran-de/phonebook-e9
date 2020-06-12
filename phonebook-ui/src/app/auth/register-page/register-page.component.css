@@ -4,9 +4,6 @@
   backdrop-filter: blur(50px);
   border-radius: 12px;
   padding: 40px 30px;
-}
-
-.auth-form {
   display: flex;
   flex-direction: column;
   justify-content: center;

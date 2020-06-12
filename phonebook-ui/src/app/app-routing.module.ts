@@ -8,9 +8,8 @@ import {SuccessPageComponent} from "./auth/success-page/success-page.component";
 import {ResetPasswordPageComponent} from "./auth/reset-password-page/reset-password-page.component";
 import {NewPasswordPageComponent} from "./auth/new-password-page/new-password-page.component";
 import {UpdatedPasswordPageComponent} from "./auth/updated-password-page/updated-password-page.component";
+import {ResetPasswordMessagePageComponent} from "./auth/reset-password-message-page/reset-password-message-page.component";
 
-
-let UpdatedPasswordPageComponentt;
 const routes: Routes = [
   {
     path: '', component: AuthLayoutComponent, children: [
@@ -20,6 +19,7 @@ const routes: Routes = [
       { path: 'confirmation', component: ConfirmationPageComponent },
       { path: 'success', component: SuccessPageComponent },
       { path: 'reset-password', component: ResetPasswordPageComponent },
+      { path: 'reset-password-message', component: ResetPasswordMessagePageComponent },
       { path: 'new-password', component: NewPasswordPageComponent },
       { path: 'updated-password', component: UpdatedPasswordPageComponent },
     ]

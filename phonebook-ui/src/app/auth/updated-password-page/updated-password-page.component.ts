@@ -9,6 +9,8 @@ export class UpdatedPasswordPageComponent implements OnInit {
 
   constructor() { }
 
+  classes: string = 'auth-info animate__animated animate__zoomIn'
+
   ngOnInit(): void {
   }
 

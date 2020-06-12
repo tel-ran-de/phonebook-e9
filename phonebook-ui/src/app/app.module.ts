@@ -13,6 +13,8 @@ import { SuccessPageComponent } from './auth/success-page/success-page.component
 import { ResetPasswordPageComponent } from './auth/reset-password-page/reset-password-page.component';
 import { NewPasswordPageComponent } from './auth/new-password-page/new-password-page.component';
 import { UpdatedPasswordPageComponent } from './auth/updated-password-page/updated-password-page.component';
+import { HttpClientModule } from "@angular/common/http";
+import { ResetPasswordMessagePageComponent } from './auth/reset-password-message-page/reset-password-message-page.component';
 
 @NgModule({
   declarations: [
@@ -25,13 +27,15 @@ import { UpdatedPasswordPageComponent } from './auth/updated-password-page/updat
     ResetPasswordPageComponent,
     NewPasswordPageComponent,
     UpdatedPasswordPageComponent,
+    ResetPasswordMessagePageComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

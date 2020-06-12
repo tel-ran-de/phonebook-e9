@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {AuthMessages} from "../../common/messages/auth-messages";
+import {AuthMessage} from "../../common/message/auth-message";
 @Component({
   selector: 'app-register-page',
   templateUrl: './register-page.component.html',
@@ -8,7 +8,7 @@ import {AuthMessages} from "../../common/messages/auth-messages";
 })
 export class RegisterPageComponent implements OnInit {
 
-  constructor(private authMessages: AuthMessages) { }
+  constructor(private authMessages: AuthMessage) { }
 
   form: FormGroup
   message = this.authMessages

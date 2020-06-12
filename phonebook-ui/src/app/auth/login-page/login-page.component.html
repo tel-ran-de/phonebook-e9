@@ -44,7 +44,10 @@
         <span *ngIf="form.enabled">Login</span>
         <span *ngIf="form.disabled">Loading...</span>
       </button>
-      <span><a *ngIf="form.enabled" routerLink="/reset-password">Forgot your password?</a></span>
+      <div class="wrapper-link">
+        <span><a *ngIf="form.enabled" routerLink="/reset-password">Forgot your password?</a></span>
+        <span><a *ngIf="form.enabled" routerLink="/register">Sign In</a></span>
+      </div>
     </div>
   </div>
 </form>

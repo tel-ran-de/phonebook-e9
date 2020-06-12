@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthMessages} from "../../common/messages/auth-messages";
+import {AuthMessage} from "../../common/message/auth-message";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
@@ -9,7 +9,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class LoginPageComponent implements OnInit {
 
-  constructor(private authMessages: AuthMessages) { }
+  constructor(private authMessages: AuthMessage) { }
 
   form: FormGroup
   message = this.authMessages
