@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {RegisterComponent} from "./auth/register/register.component";
-import {ActivationComponent} from "./auth/activation/activation.component";
-import {PendingComponent} from "./auth/pending/pending.component";
 import {AuthLayoutComponent} from "./common/layout/auth-layout/auth-layout.component";
+import {RegisterPageComponent} from "./auth/register-page/register-page.component";
+import {ActivationPageComponent} from "./auth/activation-page/activation-page.component";
+import {PendingPageComponent} from "./auth/pending-page/pending-page.component";
 
 
 const routes: Routes = [
@@ -11,9 +11,9 @@ const routes: Routes = [
     path: '', component: AuthLayoutComponent, children: [
       // { path: '', redirectTo: '/login', pathMatch: 'full' },
       {path: '', redirectTo: 'user/register', pathMatch: 'full'},
-      {path: 'user/register', component: RegisterComponent},
-      {path: 'user/activation', component: ActivationComponent},
-      {path: 'user/pending/:token', component: PendingComponent},
+      {path: 'user/register', component: RegisterPageComponent},
+      {path: 'user/activation', component: ActivationPageComponent},
+      {path: 'user/pending/:token', component: PendingPageComponent},
     ]
   }
 ];
@@ -22,4 +22,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}
