@@ -72,7 +72,7 @@ export class RegisterPageComponent implements OnInit, OnDestroy {
       if (error.status === 0)
         message = `Error Code: ${error.status}\n. Server unavailable, try again later`;
       else
-        message = `Error Code: ${error.status}\n. ${error.message}`;
+        message = `Error Code: ${error.status}\n. ${error.error.message}`;
       return message
     }
   }
