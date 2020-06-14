@@ -8,8 +8,8 @@ import {User} from "../model/user";
 export class UserService {
 
   private host = 'http://localhost:8080/';
-  private registerUrl = `${this.host}api/v1/registration`;
-  private registerConfirmUrl = `${this.host}api/v1/confirmation?token=`;
+  private registerUrl = `${this.host}api/v1/user/registration`;
+  private registerConfirmUrl = `${this.host}api/v1/user/confirmation?token=`;
 
   constructor(private http: HttpClient) {
   }
