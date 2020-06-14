@@ -8,17 +8,17 @@ import {User} from "../model/user";
 export class UserService {
 
   private host = 'http://localhost:8080/';
+  private registerUrl = `${this.host}api/v1/registration`;
+  private registerConfirmUrl = `${this.host}api/v1/confirmation?token=`;
 
   constructor(private http: HttpClient) {
   }
 
   registerNewUser(user: User) {
-    const url = `${this.host}api/v1/registration`;
-    return this.http.post<User>(url, user);
+    return this.http.post<User>(this.registerUrl, user);
   }
 
   sendRequestToRegisterConfirm(token: string) {
-    const url = `${this.host}api/v1/confirmation?token=${token}`;
-    return this.http.get(url);
+    return this.http.get(`${this.registerConfirmUrl}${token}`);
   }
 }
