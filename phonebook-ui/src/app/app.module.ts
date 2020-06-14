@@ -7,8 +7,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {AuthLayoutComponent} from "./common/layout/auth-layout/auth-layout.component";
 import {RegisterPageComponent} from "./auth/register-page/register-page.component";
+import {PendingPageComponent} from "./auth/pending-page/pending.component";
 import {ActivationPageComponent} from "./auth/activation-page/activation-page.component";
-import {PendingPageComponent} from "./auth/pending-page/pending-page.component";
 
 
 @NgModule({
@@ -16,8 +16,8 @@ import {PendingPageComponent} from "./auth/pending-page/pending-page.component";
     AppComponent,
     AuthLayoutComponent,
     RegisterPageComponent,
-    ActivationPageComponent,
     PendingPageComponent,
+    ActivationPageComponent,
   ],
   imports: [
     BrowserModule,

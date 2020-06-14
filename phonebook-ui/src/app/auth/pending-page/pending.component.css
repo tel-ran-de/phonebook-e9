@@ -23,25 +23,4 @@
   line-height: 22px;
 }
 
-.link-button {
-  margin-top: 20px;
-  width: 100%;
-  background: #007AFF;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 0;
-  cursor: pointer;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: bold;
-}
-.link-button:hover {
-  background: #258DFF;
-}
-.link-button a {
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-/*# sourceMappingURL=success-page.component.css.map */
+/*# sourceMappingURL=confirmation-page.component.css.map */

@@ -61,7 +61,7 @@ export class RegisterPageComponent implements OnInit, OnDestroy {
     user.password = this.form.value.password;
 
     this.userSubscription = this.userService.registerNewUser(user)
-      .subscribe(_ => this.router.navigate(['../activation'], {relativeTo: this.route}),
+      .subscribe(_ => this.router.navigate(['../pending'], {relativeTo: this.route}),
         error => {
           this.loading = false;
           this.errorMessage = errorHandler(error);

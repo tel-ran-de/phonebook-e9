@@ -1,6 +1,8 @@
 <div class="auth-info">
-  <span class="info-title">Confirmation</span>
+  <span class="info-title">Email Confirmation </span>
   <div class="message">
-    To complete registration, please confirm your email address. The confirmation link has been sent to your email address.
+    {{confirmMessage}}
   </div>
+  <button class="link-button" routerLink="/login" *ngIf="!errorStat"> Go to Login</button>
+  <button class="link-button" routerLink="/login" *ngIf="errorStat"> Go to registration</button>
 </div>

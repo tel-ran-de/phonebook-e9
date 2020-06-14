@@ -32,7 +32,7 @@
     </div>
     <div class="form-action">
       <div class="wrapper" *ngIf="submitted">
-        <div class="message" *ngIf="errorMessage">{{errorMessage}}</div>
+        <div class="message" *ngIf="errorMessage && !loading">{{errorMessage}}</div>
       </div>
       <button class="form-button" [disabled]="loading" type="submit">
         <span *ngIf="!loading">Register</span>
