@@ -17,6 +17,12 @@ public class User {
     private String email;
 
     @Setter
+    private String name;
+
+    @Setter
+    private String lastName;
+
+    @Setter
     private String password;
 
     @Setter
@@ -24,12 +30,6 @@ public class User {
 
     @Setter
     private Boolean enabled;
-
-    @Setter
-    private String name;
-
-    @Setter
-    private String lastName;
 
     @OneToMany(mappedBy = "user")
     private List<Contact> contacts = new ArrayList<>();

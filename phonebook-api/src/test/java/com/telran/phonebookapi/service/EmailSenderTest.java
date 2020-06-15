@@ -33,7 +33,6 @@ class EmailSenderTest {
         String subject = "Mail Confirmation Link!";
         String ourMail = "no-reply@gmail.com";
         String text = "Thank you for your registration!";
-
         emailSender.send(userMail, subject, ourMail, text);
 
         verify(javaMailSender, times(1)).send(messageCaptor.capture());

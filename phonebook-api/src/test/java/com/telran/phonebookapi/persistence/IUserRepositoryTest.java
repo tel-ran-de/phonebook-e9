@@ -1,4 +1,4 @@
-package com.telran.phonebookapi.repository;
+package com.telran.phonebookapi.persistence;
 
 import com.telran.phonebookapi.entity.User;
 import org.junit.jupiter.api.Test;
@@ -11,10 +11,10 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
     @DataJpaTest
-    class UserRepositoryTest {
+    class IUserRepositoryTest {
 
         @Autowired
-        UserRepository userRepository;
+        IUserRepository userRepository;
 
         @Autowired
         TestEntityManager entityManager;

@@ -1,11 +1,11 @@
-package com.telran.phonebookapi.repository;
+package com.telran.phonebookapi.persistence;
 
 import com.telran.phonebookapi.entity.ConfirmationToken;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface ConfirmationTokenRepository extends CrudRepository<ConfirmationToken, Long> {
+public interface IConfirmationTokenRepository extends CrudRepository<ConfirmationToken, Long> {
     Optional<ConfirmationToken> findByToken(String token);
 }
 

@@ -1,4 +1,4 @@
-package com.telran.phonebookapi.repository;
+package com.telran.phonebookapi.persistence;
 
 import com.telran.phonebookapi.entity.ConfirmationToken;
 import com.telran.phonebookapi.entity.User;
@@ -12,10 +12,10 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class ConfirmationTokenRepositoryTest {
+class IConfirmationTokenRepositoryTest {
 
     @Autowired
-    ConfirmationTokenRepository tokenRepository;
+    IConfirmationTokenRepository tokenRepository;
 
     @Autowired
     TestEntityManager entityManager;

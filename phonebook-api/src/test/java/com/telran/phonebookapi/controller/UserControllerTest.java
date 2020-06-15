@@ -3,7 +3,7 @@ package com.telran.phonebookapi.controller;
 
 import com.telran.phonebookapi.entity.ConfirmationToken;
 import com.telran.phonebookapi.entity.User;
-import com.telran.phonebookapi.repository.ConfirmationTokenRepository;
+import com.telran.phonebookapi.persistence.IConfirmationTokenRepository;
 import com.telran.phonebookapi.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +32,7 @@ class UserControllerTest {
     @MockBean
     private UserService service;
     @MockBean
-    private ConfirmationTokenRepository confirmationTokenRepository;
+    private IConfirmationTokenRepository confirmationTokenRepository;
 
     @Test
     public void testCreate_returnsOk() throws Exception {
