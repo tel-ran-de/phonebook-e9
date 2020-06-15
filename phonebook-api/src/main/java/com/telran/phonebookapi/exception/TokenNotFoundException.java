@@ -1,8 +1,15 @@
 package com.telran.phonebookapi.exception;
 
-public class TokenNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class TokenNotFoundException extends AbstractException {
+
+    @Override
+    public HttpStatus getStatus() {
+        return HttpStatus.NOT_FOUND;
+    }
 
     public TokenNotFoundException() {
-        super("Token not found.");
+        super("Please sign up.");
     }
 }

@@ -3,17 +3,18 @@ package com.telran.phonebookapi.service;
 import com.telran.phonebookapi.entity.ConfirmationToken;
 import com.telran.phonebookapi.entity.User;
 import com.telran.phonebookapi.exception.TokenNotFoundException;
+import com.telran.phonebookapi.exception.UserAlreadyExistsException;
+import com.telran.phonebookapi.repository.ConfirmationTokenRepository;
 import com.telran.phonebookapi.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -21,21 +22,31 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
     @Mock
-    private ConfirmationTokenService confirmationTokenService;
+    private ConfirmationTokenRepository confirmationTokenRepository;
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Mock
-    private JavaMailSender javaMailSender;
+    private EmailSender emailSender;
 
     @Test
     public void testCreate_newUser_returnsOk() {
         User user = new User("anna@gmail.com", "kjkjsdfsdfdf");
         ConfirmationToken token = new ConfirmationToken(user);
         userRepository.save(user);
-        confirmationTokenService.save(token);
+        confirmationTokenRepository.save(token);
+        emailSender.send(user.getEmail(), "Token", "our@gmail.com", "Hi");
 
         verify(userRepository, times(1)).save(any());
-        verify(confirmationTokenService, times(1)).save(any());
+        verify(confirmationTokenRepository, times(1)).save(any());
+        verify(emailSender, times(1)).send(user.getEmail(), "Token", "our@gmail.com", "Hi");
+    }
+
+    @Test
+    public void testCreate_userAlreadyExists_throwsException() {
+        User user = new User("john@gmail.com", "sdfdsfdfgs");
+        when(userRepository.findById(user.getEmail())).thenThrow(UserAlreadyExistsException.class);
+
+        assertThrows(UserAlreadyExistsException.class, () -> userRepository.findById(user.getEmail()));
     }
 
     @Test
@@ -43,12 +54,21 @@ class UserServiceTest {
         User user = new User("anna@gmail.com", "kjkjsdfsdfdf");
         user.setEnabled(true);
         ConfirmationToken token = new ConfirmationToken(user);
-        confirmationTokenService.findByToken(token.getToken());
+        confirmationTokenRepository.findByToken(token.getToken());
         userRepository.save(user);
-        confirmationTokenService.delete(token.getId());
+        confirmationTokenRepository.deleteById(token.getId());
 
-        verify(confirmationTokenService, times(1)).findByToken(any());
+        verify(confirmationTokenRepository, times(1)).findByToken(any());
         verify(userRepository, times(1)).save(any());
-        verify(confirmationTokenService, times(1)).delete(any());
+        verify(confirmationTokenRepository, times(1)).deleteById(any());
+    }
+
+    @Test
+    public void testConfirm_nonValidToken_throwsException() {
+        User user = new User("john@gmail.com", "sdfdsfdfgs");
+        ConfirmationToken token = new ConfirmationToken(user);
+        when(confirmationTokenRepository.findByToken(token.getToken())).thenThrow(TokenNotFoundException.class);
+
+        assertThrows(TokenNotFoundException.class, () -> confirmationTokenRepository.findByToken(token.getToken()));
     }
 }
