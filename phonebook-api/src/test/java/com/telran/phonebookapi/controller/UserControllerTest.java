@@ -90,6 +90,17 @@ class UserControllerTest {
     }
 
     @Test
+    public void testCreate_EmailWithForbiddenChar_returns400() throws Exception {
+        mvc.perform(post("/api/user/registration")
+                .content("{\"email\": \"~%anna@gmail.com*&^%\",\"password\":\"pegfhfhgfhfght\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        verify(service, never()).create(anyString(), anyString());
+    }
+
+    @Test
     public void testConfirm_validToken_returnsOk() throws Exception {
         User user = new User("anna@gmail.com", "dfdfdfgfgsr");
         ConfirmationToken token = new ConfirmationToken(user);

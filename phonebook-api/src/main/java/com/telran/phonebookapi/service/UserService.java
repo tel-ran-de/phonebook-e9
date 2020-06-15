@@ -26,14 +26,14 @@ public class UserService {
     private final EmailSender emailSender;
 
     public void create(String email, String password) {
-        final Optional<User> optionalUser = userRepository.findById(email);
+        final Optional<User> optionalUser = userRepository.findById(email.toLowerCase());
 
         if (optionalUser.isPresent()) {
             throw new UserAlreadyExistsException(email);
 
         } else {
             final String encryptedPassword = bCryptPasswordEncoder.encode(password);
-            User user = new User(email, encryptedPassword);
+            User user = new User(email.toLowerCase(), encryptedPassword);
             userRepository.save(user);
 
             final ConfirmationToken confirmationToken = new ConfirmationToken(user);
