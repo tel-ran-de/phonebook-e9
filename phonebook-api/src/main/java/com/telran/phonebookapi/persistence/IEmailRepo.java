@@ -8,7 +8,5 @@ import java.util.List;
 
 public interface IEmailRepo extends CrudRepository<Email, Integer> {
 
-    List<Email> getByContact(Contact contact);
-
-    List<Email> findByContactId(int contactId);
+    List<Email> getByContactId(int contactId);
 }

@@ -23,70 +23,6 @@ class IAddressRepoTest {
     TestEntityManager entityManager;
 
     @Test
-    public void testGetByContact_threeContacts_twoFound(){
-        User user = new User ("email@email.com", "1234");
-        entityManager.persist(user);
-        entityManager.flush();
-        entityManager.clear();
-
-        Contact contact = new Contact("Vasya", "Vasin", user);
-        Contact contact2 = new Contact("Petya", "Vasin", user);
-        Contact contact3 = new Contact("Vasya", "Petin", user);
-        entityManager.persist(contact);
-        entityManager.persist(contact2);
-        entityManager.persist(contact3);
-        entityManager.flush();
-        entityManager.clear();
-
-        Address address = new Address(contact, AddressType.HOME);
-        Address address2 = new Address(contact, AddressType.WORK);
-        Address address3 = new Address(contact2, AddressType.WORK);
-        Address address4 = new Address(contact3, AddressType.OTHER);
-        entityManager.persist(address);
-        entityManager.persist(address2);
-        entityManager.persist(address3);
-        entityManager.persist(address4);
-        entityManager.flush();
-        entityManager.clear();
-
-        List<Address> addressesFromDb = addressRepo.getByContact(contact);
-        assertEquals(2, addressesFromDb.size());
-        assertEquals(AddressType.HOME, addressesFromDb.get(0).getType());
-        assertEquals(AddressType.WORK, addressesFromDb.get(1).getType());
-    }
-
-    @Test
-    public void testGetByContact_threeContacts_noFound(){
-        User user = new User ("email@email.com", "1234");
-        entityManager.persist(user);
-        entityManager.flush();
-        entityManager.clear();
-
-        Contact contact = new Contact("Vasya", "Vasin", user);
-        Contact contact2 = new Contact("Petya", "Vasin", user);
-        Contact contact3 = new Contact("Vasya", "Petin", user);
-        entityManager.persist(contact);
-        entityManager.persist(contact2);
-        entityManager.persist(contact3);
-        entityManager.flush();
-        entityManager.clear();
-
-        Address address = new Address(contact, AddressType.HOME);
-        Address address2 = new Address(contact, AddressType.WORK);
-        Address address3 = new Address(contact3, AddressType.WORK);
-        Address address4 = new Address(contact3, AddressType.OTHER);
-        entityManager.persist(address);
-        entityManager.persist(address2);
-        entityManager.persist(address3);
-        entityManager.persist(address4);
-        entityManager.flush();
-        entityManager.clear();
-
-        List<Address> addressesFromDb = addressRepo.getByContact(contact2);
-        assertEquals(0, addressesFromDb.size());
-    }
-
-    @Test
     public void testFindByContactId_threeContacts_twoFound(){
         User user = new User ("email@email.com", "1234");
         entityManager.persist(user);
@@ -113,7 +49,7 @@ class IAddressRepoTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<Address> addressesFromDb = addressRepo.findByContactId(1);
+        List<Address> addressesFromDb = addressRepo.getByContactId(1);
         assertEquals(2, addressesFromDb.size());
         assertEquals(AddressType.HOME, addressesFromDb.get(0).getType());
         assertEquals(AddressType.WORK, addressesFromDb.get(1).getType());
@@ -146,7 +82,7 @@ class IAddressRepoTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<Address> addressesFromDb = addressRepo.findByContactId(2);
+        List<Address> addressesFromDb = addressRepo.getByContactId(2);
         assertEquals(0, addressesFromDb.size());
     }
 
@@ -181,7 +117,7 @@ class IAddressRepoTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<Address> addressesFromDb = addressRepo.findByZipCode(22222);
+        List<Address> addressesFromDb = addressRepo.getByZipCode(22222);
         assertEquals(1, addressesFromDb.size());
         assertEquals(AddressType.WORK, addressesFromDb.get(0).getType());
         assertEquals(22222, addressesFromDb.get(0).getZipCode());
@@ -218,7 +154,7 @@ class IAddressRepoTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<Address> addressesFromDb = addressRepo.findByZipCode(12345);
+        List<Address> addressesFromDb = addressRepo.getByZipCode(12345);
         assertEquals(0, addressesFromDb.size());
     }
 
@@ -253,7 +189,7 @@ class IAddressRepoTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<Address> addressesFromDb = addressRepo.findByCountry("Germany");
+        List<Address> addressesFromDb = addressRepo.getByCountry("Germany");
         assertEquals(2, addressesFromDb.size());
         assertEquals("Vasya", addressesFromDb.get(0).getContact().getName());
         assertEquals("Petya", addressesFromDb.get(1).getContact().getName());
@@ -290,7 +226,7 @@ class IAddressRepoTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<Address> addressesFromDb = addressRepo.findByCity("Berlin");
+        List<Address> addressesFromDb = addressRepo.getByCity("Berlin");
         assertEquals(3, addressesFromDb.size());
         assertEquals("Vasya", addressesFromDb.get(0).getContact().getName());
         assertEquals("Vasya", addressesFromDb.get(1).getContact().getName());

@@ -8,13 +8,11 @@ import java.util.List;
 
 public interface IAddressRepo extends CrudRepository<Address, Integer> {
 
-    List<Address> getByContact(Contact contact);
+    List<Address> getByContactId(int contactId);
 
-    List<Address> findByContactId(int contactId);
+    List<Address> getByZipCode(int zipCode);
 
-    List<Address> findByZipCode(int zipCode);
+    List<Address> getByCountry(String country);
 
-    List<Address> findByCountry(String country);
-
-    List<Address> findByCity(String city);
+    List<Address> getByCity(String city);
 }

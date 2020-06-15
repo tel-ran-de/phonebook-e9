@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IContactRepo extends CrudRepository<Contact, Integer> {
 
-    List<Contact> findByName(String name);
+    List<Contact> getByName(String name);
 
     List<Contact> getByUser(User user);
 

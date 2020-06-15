@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import javax.persistence.GenerationType;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,7 +32,7 @@ class IContactRepoTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<Contact> contactsFromBD = contactRepo.findByName("Vasya");
+        List<Contact> contactsFromBD = contactRepo.getByName("Vasya");
         assertEquals(1, contactsFromBD.size());
         assertEquals("Vasya", contactsFromBD.get(0).getName());
     }
@@ -55,7 +53,7 @@ class IContactRepoTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<Contact> contactsFromBD = contactRepo.findByName("Vasya");
+        List<Contact> contactsFromBD = contactRepo.getByName("Vasya");
         assertEquals(2, contactsFromBD.size());
         assertEquals("Vasin", contactsFromBD.get(0).getLastName());
         assertEquals("Petin", contactsFromBD.get(1).getLastName());
@@ -77,7 +75,7 @@ class IContactRepoTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<Contact> contactsFromBD = contactRepo.findByName("Masha");
+        List<Contact> contactsFromBD = contactRepo.getByName("Masha");
         assertEquals(0, contactsFromBD.size());
     }
 

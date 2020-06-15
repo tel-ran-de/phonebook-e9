@@ -8,7 +8,5 @@ import java.util.List;
 
 public interface IPhoneRepo extends CrudRepository<Phone, Integer> {
 
-    List<Phone> getByContact(Contact contact);
-
-    List<Phone> findByContactId(int contactId);
+    List<Phone> getByContactId(int contactId);
 }
