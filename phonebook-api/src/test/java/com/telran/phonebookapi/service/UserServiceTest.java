@@ -38,7 +38,7 @@ class UserServiceTest {
 
         verify(userRepository, times(1)).save(any());
         verify(confirmationTokenRepository, times(1)).save(any());
-        verify(emailSender, times(1)).send(user.getEmail(), "Token", "our@gmail.com", "Hi");
+        verify(emailSender, times(1)).send(anyString(), anyString(), anyString(), anyString());
     }
 
     @Test

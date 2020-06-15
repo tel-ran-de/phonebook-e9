@@ -1,8 +1,9 @@
 package com.telran.phonebookapi.service;
 
 import lombok.AllArgsConstructor;
+
+import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class EmailSender {
 
-    private final JavaMailSender javaMailSender;
+    private final MailSender mailSender;
 
     @Async
     public void send(String userMail, String subject, String ourMail, String text) {
@@ -20,6 +21,6 @@ public class EmailSender {
         mailMessage.setFrom(ourMail);
         mailMessage.setText(text);
 
-        javaMailSender.send(mailMessage);
+        mailSender.send(mailMessage);
     }
 }
