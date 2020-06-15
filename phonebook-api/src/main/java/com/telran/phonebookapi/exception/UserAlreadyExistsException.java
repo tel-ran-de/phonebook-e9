@@ -1,14 +1,6 @@
 package com.telran.phonebookapi.exception;
 
-import org.springframework.http.HttpStatus;
-
-public class UserAlreadyExistsException extends AbstractException {
-
-    @Override
-    public HttpStatus getStatus() {
-        return HttpStatus.BAD_REQUEST;
-    }
-
+public class UserAlreadyExistsException extends RuntimeException {
     public UserAlreadyExistsException(String email) {
         super(String.format("User with email: %s already exists.", email));
     }

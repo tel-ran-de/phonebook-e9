@@ -1,7 +1,6 @@
 package com.telran.phonebookapi.controller;
 
 import com.telran.phonebookapi.dto.UserDto;
-import com.telran.phonebookapi.entity.User;
 import com.telran.phonebookapi.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
