@@ -1,7 +1,6 @@
 package com.telran.phonebookapi.persistence;
 
 import com.telran.phonebookapi.entity.Address;
-import com.telran.phonebookapi.entity.Contact;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
