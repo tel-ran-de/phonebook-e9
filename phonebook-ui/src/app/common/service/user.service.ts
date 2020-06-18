@@ -8,19 +8,15 @@ import { User } from '../interface/user.interface'
 })
 export class UserService {
 
-  private host = 'http://localhost:8080/'
-  private registerUrl = `${this.host}api/v1/user/registration`
-  private registerConfirmUrl = `${this.host}api/v1/user/confirmation?token=`
-
   constructor(private http: HttpClient) {
   }
 
   registerNewUser(user: User) {
-    return this.http.post<User>(this.registerUrl, user)
+    return this.http.post<User>('/api/user/registration', user)
   }
 
   sendRequestToRegisterConfirm(token: string) {
-    return this.http.get(`${this.registerConfirmUrl}${token}`)
+    return this.http.get(`/api/user/confirmation?token=${token}`)
   }
 
   recoveryPassword(user: User): Observable<User> {
