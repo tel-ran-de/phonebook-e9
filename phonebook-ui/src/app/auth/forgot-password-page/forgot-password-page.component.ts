@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
-import { AuthMessage } from 'src/app/common/message/auth-message';
-import { AuthService } from 'src/app/common/service/auth.service';
+import { Component, OnInit } from '@angular/core'
+import { FormGroup, FormControl, Validators } from '@angular/forms'
+import { Subscription } from 'rxjs'
+import { Router } from '@angular/router'
+import { AuthMessage } from 'src/app/common/message/auth-message'
+import { UserService } from '../../common/service/user.service'
 
 @Component({
   selector: 'app-forgot-password-page',
@@ -13,8 +13,8 @@ import { AuthService } from 'src/app/common/service/auth.service';
 export class ForgotPasswordPageComponent implements OnInit {
 
   constructor(private authMessages: AuthMessage,
-    private authService: AuthService,
-    private router: Router) {
+              private userService: UserService,
+              private router: Router) {
   }
 
   form: FormGroup
@@ -41,7 +41,7 @@ export class ForgotPasswordPageComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       this.form.disable()
-      this.authService.recoveryPassword(this.form.value).subscribe(
+      this.userService.recoveryPassword(this.form.value).subscribe(
         () => this.router.navigate(['/user/forgot-password-info']),
         error => {
           this.passwordRecoveryError = true

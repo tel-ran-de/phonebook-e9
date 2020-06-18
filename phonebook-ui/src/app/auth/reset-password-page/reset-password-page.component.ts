@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/common/service/auth.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { AuthMessage } from 'src/app/common/message/auth-message';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { AuthMessage } from 'src/app/common/message/auth-message'
+import { FormGroup, FormControl, Validators } from '@angular/forms'
+import { Subscription } from 'rxjs'
+import { UserService } from '../../common/service/user.service'
 
 @Component({
   selector: 'app-reset-password-page',
@@ -12,10 +12,10 @@ import { Subscription } from 'rxjs';
 })
 export class ResetPasswordPageComponent implements OnInit {
 
-  constructor(private auth: AuthService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private authMessages: AuthMessage
+  constructor(private userService: UserService,
+              private router: Router,
+              private route: ActivatedRoute,
+              private authMessages: AuthMessage
   ) {
   }
 
@@ -41,7 +41,7 @@ export class ResetPasswordPageComponent implements OnInit {
   onSubmit() {
     if (this.form.valid && (this.form.get('password').value === this.form.get('confirmPassword').value)) {
       this.form.disable()
-      this.auth.resetPassword(this.form.value, this.route.snapshot.queryParams.token).subscribe(
+      this.userService.resetPassword(this.form.value, this.route.snapshot.queryParams.token).subscribe(
         () => this.router.navigate(['/user/reset-password-info']),
         error => {
           this.classes = 'auth-form  animate__animated animate__wobble'
