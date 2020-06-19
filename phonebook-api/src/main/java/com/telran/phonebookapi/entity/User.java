@@ -34,6 +34,12 @@ public class User {
     @Setter
     private String lastName;
 
+    @Setter
+    private UserRole userRole;
+
+    @Setter
+    private Boolean enabled;
+
     @OneToMany(mappedBy = "user")
     private List<Contact> contacts = new ArrayList<>();
 

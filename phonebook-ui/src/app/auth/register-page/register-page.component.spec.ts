@@ -178,7 +178,7 @@ describe('Component: Login', () => {
     expect(component.form.valid).toBeFalsy();
   });
 
-  it('email wirt domain names("email@valid.com.com") invalid. Email invalid, password valid, passwordConfirm valid, form invalid', () => {
+  it('email with domain names("email@valid.") invalid. Email invalid, password valid, passwordConfirm valid, form invalid', () => {
     let password = component.form.controls['password'];
     let passwordConfirm = component.form.controls['passwordConfirm'];
     let email = component.form.controls['email'];
@@ -206,6 +206,66 @@ describe('Component: Login', () => {
     expect(password.valid).toBeTruthy();
     expect(passwordConfirm.valid).toBeTruthy();
     expect(component.form.valid).toBeFalsy();
+  });
+
+  it('email ("e1mail.e2mail@valid.com") valid. Email valid, password valid, passwordConfirm valid, form valid', () => {
+    let password = component.form.controls['password'];
+    let passwordConfirm = component.form.controls['passwordConfirm'];
+    let email = component.form.controls['email'];
+
+    email.setValue("e1mail.e2mail@valid.com")
+    password.setValue("12345678901");
+    passwordConfirm.setValue("12345678901");
+
+    expect(email.valid).toBeTruthy();
+    expect(password.valid).toBeTruthy();
+    expect(passwordConfirm.valid).toBeTruthy();
+    expect(component.form.valid).toBeTruthy();
+  });
+
+  it('email ("e1m_ail.e2m-il@valid.com") valid. Email valid, password valid, passwordConfirm valid, form valid', () => {
+    let password = component.form.controls['password'];
+    let passwordConfirm = component.form.controls['passwordConfirm'];
+    let email = component.form.controls['email'];
+
+    email.setValue("e1m_ail.e2m-il@valid.com")
+    password.setValue("12345678901");
+    passwordConfirm.setValue("12345678901");
+
+    expect(email.valid).toBeTruthy();
+    expect(password.valid).toBeTruthy();
+    expect(passwordConfirm.valid).toBeTruthy();
+    expect(component.form.valid).toBeTruthy();
+  });
+
+  it('email ("a-z0-9._-@valid.com") valid. Email valid, password valid, passwordConfirm valid, form valid', () => {
+    let password = component.form.controls['password'];
+    let passwordConfirm = component.form.controls['passwordConfirm'];
+    let email = component.form.controls['email'];
+
+    email.setValue("a-z0-9._-@valid.com")
+    password.setValue("12345678901");
+    passwordConfirm.setValue("12345678901");
+
+    expect(email.valid).toBeTruthy();
+    expect(password.valid).toBeTruthy();
+    expect(passwordConfirm.valid).toBeTruthy();
+    expect(component.form.valid).toBeTruthy();
+  });
+
+  it('email ("valid.valid.valid@valid.com") valid. Email valid, password valid, passwordConfirm valid, form valid', () => {
+    let password = component.form.controls['password'];
+    let passwordConfirm = component.form.controls['passwordConfirm'];
+    let email = component.form.controls['email'];
+
+    email.setValue("valid.valid.valid@valid.com")
+    password.setValue("12345678901");
+    passwordConfirm.setValue("12345678901");
+
+    expect(email.valid).toBeTruthy();
+    expect(password.valid).toBeTruthy();
+    expect(passwordConfirm.valid).toBeTruthy();
+    expect(component.form.valid).toBeTruthy();
   });
 
   it('on submit', () => {
