@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface ConfirmationTokenRepository extends CrudRepository<ConfirmationToken, Long> {
     Optional<ConfirmationToken> findByToken(String token);
-    Optional<ConfirmationToken> findByUserEmail(String userEmail);
+    Optional<ConfirmationToken> findByUserEmailIgnoreCase(String userEmail);
 }
 

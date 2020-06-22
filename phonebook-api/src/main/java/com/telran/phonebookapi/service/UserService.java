@@ -29,7 +29,7 @@ public class UserService {
             + HOST_UI + CONFIRM_REGISTRATION_UI + "%s";
 
     private static final String RESEND_REGISTRATION_CONFORMATION_MAIL_TEXT = "You have received this letter since requested password recovery.\n" +
-            " Due to the fact that the account is still not activated, password recovery is not possible.\n" +
+            "Due to the fact that the account is still not activated, password recovery is not possible.\n" +
             "Follow the link to activate your account and go through the password recovery process.\n"
             + HOST_UI + CONFIRM_REGISTRATION_UI + "%s";
 
@@ -70,14 +70,13 @@ public class UserService {
         confirmationTokenRepository.deleteById(confirmationToken.getId());
     }
 
-    public void creatAndSendTokenForPassRecovery(String email) {
+    public void createAndSendTokenForPassRecovery(String email) {
         Optional<User> userOptional = userRepository.findById(email);
 
-        User user = userOptional.
-                orElseThrow(() -> new UserNotFoundException(email));
+        User user = userOptional.orElseThrow(() -> new UserNotFoundException(email));
 
         if (!user.getEnabled()) {
-            ConfirmationToken confirmationToken = confirmationTokenRepository.findByUserEmail(user.getEmail());
+            ConfirmationToken confirmationToken = confirmationTokenRepository.findByUserEmailIgnoreCase(user.getEmail()).orElseThrow(TokenNotFoundException::new);
             emailSender.send(user.getEmail(), PASS_RECOVERY_MAIL_SUBJECT, OUR_MAIL, String.format(RESEND_REGISTRATION_CONFORMATION_MAIL_TEXT, confirmationToken.getToken()));
             throw new UserNotActivatedException(user.getEmail());
         } else {
@@ -88,11 +87,7 @@ public class UserService {
     }
 
     public void updatePassword(String token, String password) {
-
         ConfirmationToken confirmationToken = confirmationTokenRepository.findByToken(token).orElseThrow(TokenNotFoundException::new);
-
-        if (confirmationToken == null)
-            throw new TokenNotFoundException();
 
         final User user = confirmationToken.getUser();
         final String encryptedPassword = bCryptPasswordEncoder.encode(password);
