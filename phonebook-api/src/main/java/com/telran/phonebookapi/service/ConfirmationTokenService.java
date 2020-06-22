@@ -25,6 +25,6 @@ public class ConfirmationTokenService {
     }
 
     public ConfirmationToken findByEmail(String userEmail) {
-        return confirmationTokenRepository.findByUserEmail(userEmail).orElseThrow(TokenNotFoundException::new);
+        return confirmationTokenRepository.findByUserEmailIgnoreCase(userEmail).orElseThrow(TokenNotFoundException::new);
     }
 }
