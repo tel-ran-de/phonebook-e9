@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin
 @RequestMapping("/api/user")
 public class UserController {
 
@@ -29,7 +30,7 @@ public class UserController {
         userService.createAndSendTokenForPassRecovery(userDto.email);
     }
 
-    @PutMapping("/reset-password")
+    @PutMapping("/password")
     public void updatePass(@RequestBody @Valid UserDto userDto, @RequestParam(value = "token") String token) {
         userService.updatePassword(token, userDto.password);
     }
