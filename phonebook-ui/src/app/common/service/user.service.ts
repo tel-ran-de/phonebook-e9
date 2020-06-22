@@ -24,7 +24,7 @@ export class UserService {
   }
 
   resetPassword(user: User, token: string): Observable<User> {
-    return this.http.post<User>(`/api/reset-password?token=${token}`, user)
+    return this.http.put<User>(`/api/reset-password?token=${token}`, user)
   }
 
 }
