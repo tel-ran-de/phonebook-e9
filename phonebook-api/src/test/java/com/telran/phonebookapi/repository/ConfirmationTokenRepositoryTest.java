@@ -47,6 +47,48 @@ class ConfirmationTokenRepositoryTest {
         Optional<ConfirmationToken> tokenFromDb = tokenRepository.findByToken("1500000");
         assertEquals(Optional.empty(), tokenFromDb);
     }
+
+    @Test
+    public void testFindByEmail_oneTokenInDb_notFound() {
+        User user = new User("anna@gmail.com", "sdfafdfdfrdf");
+        ConfirmationToken token = new ConfirmationToken(user);
+
+        entityManager.persist(user);
+        entityManager.persist(token);
+        entityManager.flush();
+        entityManager.clear();
+
+        Optional<ConfirmationToken> tokenFromDb = tokenRepository.findByUserEmailIgnoreCase("notfound@email.com");
+        assertEquals(Optional.empty(), tokenFromDb);
+    }
+
+    @Test
+    public void testFindByEmail_oneTokenInDb_oneFound() {
+        User user = new User("anna@gmail.com", "sdfafdfdfrdf");
+        ConfirmationToken token = new ConfirmationToken(user);
+
+        entityManager.persist(user);
+        entityManager.persist(token);
+        entityManager.flush();
+        entityManager.clear();
+
+        Optional<ConfirmationToken> tokenFromDb = tokenRepository.findByUserEmailIgnoreCase("anna@gmail.com");
+        assertEquals(token.getToken(), tokenFromDb.get().getToken());
+    }
+
+    @Test
+    public void testFindByEmailDifferentCase_oneTokenInDb_oneFound() {
+        User user = new User("ANNA@gMail.coM", "sdfafdfdfrdf");
+        ConfirmationToken token = new ConfirmationToken(user);
+
+        entityManager.persist(user);
+        entityManager.persist(token);
+        entityManager.flush();
+        entityManager.clear();
+
+        Optional<ConfirmationToken> tokenFromDb = tokenRepository.findByUserEmailIgnoreCase("anna@gmAIL.COm");
+        assertEquals(token.getToken(), tokenFromDb.get().getToken());
+    }
 }
 
 
