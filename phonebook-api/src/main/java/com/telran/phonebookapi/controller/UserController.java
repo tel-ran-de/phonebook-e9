@@ -23,4 +23,14 @@ public class UserController {
     public void confirm(@RequestParam(name = "token") String token) {
         userService.confirmUser(token);
     }
+
+    @PostMapping("/reset-password")
+    public void confirmUpdatePass(@RequestBody @Valid UserDto userDto) {
+        userService.creatAndSendTokenForPassRecovery(userDto.email);
+    }
+
+    @PutMapping("/reset-password")
+    public void updatePass(@RequestBody @Valid UserDto userDto, @RequestParam(value = "token") String token) {
+        userService.updatePassword(token, userDto.password);
+    }
 }
