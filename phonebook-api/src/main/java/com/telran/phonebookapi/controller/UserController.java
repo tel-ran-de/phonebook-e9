@@ -26,7 +26,7 @@ public class UserController {
 
     @PostMapping("/reset-password")
     public void confirmUpdatePass(@RequestBody @Valid UserDto userDto) {
-        userService.creatAndSendTokenForPassRecovery(userDto.email);
+        userService.createAndSendTokenForPassRecovery(userDto.email);
     }
 
     @PutMapping("/reset-password")
