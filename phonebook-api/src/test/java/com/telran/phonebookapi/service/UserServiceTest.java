@@ -4,11 +4,15 @@ import com.telran.phonebookapi.entity.ConfirmationToken;
 import com.telran.phonebookapi.entity.User;
 import com.telran.phonebookapi.exception.TokenNotFoundException;
 import com.telran.phonebookapi.exception.UserAlreadyExistsException;
+import com.telran.phonebookapi.exception.UserNotActivatedException;
 import com.telran.phonebookapi.persistence.IConfirmationTokenRepository;
 import com.telran.phonebookapi.persistence.IUserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -89,5 +93,79 @@ class UserServiceTest {
         assertEquals("Please sign up.", exception.getMessage());
         verify(userRepository, never()).save(userCaptor.capture());
         verify(confirmationTokenRepository, never()).deleteById(any());
+    }
+
+    @Test
+    public void testPasswordRecovery_userNotActivatedAndNoTokenInDb_TokenNotFoundException() {
+        User user = new User("anna@gmail.com", "kjkjsdfsdfdf");
+        user.setEnabled(false);
+        when(userRepository.findById(user.getEmail())).thenReturn(Optional.of(user));
+
+        Exception exception = assertThrows(TokenNotFoundException.class, () -> userService.createAndSendTokenForPassRecovery(user.getEmail()));
+
+        assertEquals("Please sign up.", exception.getMessage());
+        verify(userRepository, times(1)).findById(anyString());
+        verify(emailSender, never()).send(anyString(), anyString(), anyString(), anyString());
+        verify(confirmationTokenRepository, never()).save(any());
+    }
+
+    @Test
+    public void testPasswordRecovery_userNotActivatedValidToken_throwUserNotActivatedException() {
+        User user = new User("anna@gmail.com", "kjkjsdfsdfdf");
+        user.setEnabled(false);
+        when(userRepository.findById(user.getEmail())).thenReturn(Optional.of(user));
+        ConfirmationToken token = new ConfirmationToken(user);
+        when(confirmationTokenRepository.findByUserEmailIgnoreCase(user.getEmail())).thenReturn(Optional.of(token));
+
+        Exception exception = assertThrows(UserNotActivatedException.class, () -> userService.createAndSendTokenForPassRecovery(user.getEmail()));
+
+        assertEquals("User with email: " + user.getEmail() + " is not activated. We sent again the instructions for activating the account to the specified email address.", exception.getMessage());
+        verify(userRepository, times(1)).findById(anyString());
+        verify(emailSender, times(1)).send(anyString(), anyString(), anyString(), anyString());
+        verify(confirmationTokenRepository, never()).save(any());
+    }
+
+    @Test
+    public void testPasswordRecovery_userActivated_returnOk() {
+        User user = new User("anna@gmail.com", "kjkjsdfsdfdf");
+        user.setEnabled(true);
+        when(userRepository.findById(user.getEmail())).thenReturn(Optional.of(user));
+
+        userService.createAndSendTokenForPassRecovery(user.getEmail());
+
+        verify(userRepository, times(1)).findById(user.getEmail());
+        verify(emailSender, times(1)).send(anyString(), anyString(), anyString(), anyString());
+        verify(confirmationTokenRepository, times(1)).save(any());
+    }
+
+    @Test
+    public void testPasswordUpdate_tokenNotFound_throwTokenNotFoundException() {
+        String token = "token";
+        String password = "password";
+
+        when(confirmationTokenRepository.findByToken(token)).thenThrow(new TokenNotFoundException());
+        Exception exception = assertThrows(TokenNotFoundException.class, () -> userService.updatePassword(token, password));
+
+        assertEquals("Please sign up.", exception.getMessage());
+        verify(confirmationTokenRepository, times(1)).findByToken(any());
+        verify(bCryptPasswordEncoder, never()).encode(any());
+        verify(confirmationTokenRepository, never()).deleteById(any());
+    }
+
+    @Test
+    public void testPasswordUpdate_validToken_returnOk() {
+        User user = new User("anna@gmail.com", "kjkjsdfsdfdf");
+        user.setEnabled(true);
+
+        String token = "token";
+        ConfirmationToken confirmationToken = new ConfirmationToken(user);
+        String password = "password";
+
+        when(confirmationTokenRepository.findByToken(token)).thenReturn(Optional.of(confirmationToken));
+        userService.updatePassword(token, password);
+
+        verify(confirmationTokenRepository, times(1)).findByToken(anyString());
+        verify(bCryptPasswordEncoder, times(1)).encode(anyString());
+        verify(confirmationTokenRepository, times(1)).deleteById(any());
     }
 }
