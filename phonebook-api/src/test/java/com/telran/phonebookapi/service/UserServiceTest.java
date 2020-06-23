@@ -1,11 +1,13 @@
 package com.telran.phonebookapi.service;
 
 import com.telran.phonebookapi.entity.ConfirmationToken;
+import com.telran.phonebookapi.entity.RecoveryPasswordToken;
 import com.telran.phonebookapi.entity.User;
 import com.telran.phonebookapi.exception.TokenNotFoundException;
 import com.telran.phonebookapi.exception.UserAlreadyExistsException;
 import com.telran.phonebookapi.exception.UserNotActivatedException;
 import com.telran.phonebookapi.persistence.IConfirmationTokenRepository;
+import com.telran.phonebookapi.persistence.IRecoveryPasswordTokenRepo;
 import com.telran.phonebookapi.persistence.IUserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +30,8 @@ class UserServiceTest {
     private IUserRepository userRepository;
     @Mock
     private IConfirmationTokenRepository confirmationTokenRepository;
+    @Mock
+    private IRecoveryPasswordTokenRepo recoveryPasswordTokenRepo;
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Mock
@@ -51,7 +54,7 @@ class UserServiceTest {
         verify(userRepository, times(1)).save(userCaptor.capture());
         User capturedUser = userCaptor.getValue();
         assertEquals(email, capturedUser.getEmail());
-        assertFalse(capturedUser.getEnabled());
+        assertFalse(capturedUser.getIsConfirmed());
         verify(confirmationTokenRepository, times(1)).save(any());
         verify(emailSender, times(1)).send(anyString(), anyString(), anyString(), anyString());
     }
@@ -80,7 +83,7 @@ class UserServiceTest {
         verify(userRepository, times(1)).save(userCaptor.capture());
         User capturedUser = userCaptor.getValue();
         assertEquals(user.getEmail(), capturedUser.getEmail());
-        assertTrue(capturedUser.getEnabled());
+        assertTrue(capturedUser.getIsConfirmed());
         verify(confirmationTokenRepository, times(1)).deleteById(any());
     }
 
@@ -98,44 +101,52 @@ class UserServiceTest {
     @Test
     public void testPasswordRecovery_userNotActivatedAndNoTokenInDb_TokenNotFoundException() {
         User user = new User("anna@gmail.com", "kjkjsdfsdfdf");
-        user.setEnabled(false);
+        user.setIsConfirmed(false);
         when(userRepository.findById(user.getEmail())).thenReturn(Optional.of(user));
 
         Exception exception = assertThrows(TokenNotFoundException.class, () -> userService.createAndSendTokenForPassRecovery(user.getEmail()));
 
         assertEquals("Please sign up.", exception.getMessage());
-        verify(userRepository, times(1)).findById(anyString());
+        verify(userRepository, times(1)).findById(user.getEmail());
+        verify(confirmationTokenRepository, times(1)).findByUserEmailIgnoreCase(user.getEmail());
+
         verify(emailSender, never()).send(anyString(), anyString(), anyString(), anyString());
         verify(confirmationTokenRepository, never()).save(any());
+        verify(recoveryPasswordTokenRepo, never()).save(any());
     }
 
     @Test
     public void testPasswordRecovery_userNotActivatedValidToken_throwUserNotActivatedException() {
         User user = new User("anna@gmail.com", "kjkjsdfsdfdf");
-        user.setEnabled(false);
+        user.setIsConfirmed(false);
         when(userRepository.findById(user.getEmail())).thenReturn(Optional.of(user));
         ConfirmationToken token = new ConfirmationToken(user);
         when(confirmationTokenRepository.findByUserEmailIgnoreCase(user.getEmail())).thenReturn(Optional.of(token));
 
         Exception exception = assertThrows(UserNotActivatedException.class, () -> userService.createAndSendTokenForPassRecovery(user.getEmail()));
 
-        assertEquals("User with email: " + user.getEmail() + " is not activated. We sent again the instructions for activating the account to the specified email address.", exception.getMessage());
-        verify(userRepository, times(1)).findById(anyString());
+        assertEquals("User not Activated", exception.getMessage());
+        verify(userRepository, times(1)).findById(user.getEmail());
+        verify(confirmationTokenRepository, times(1)).findByUserEmailIgnoreCase(user.getEmail());
         verify(emailSender, times(1)).send(anyString(), anyString(), anyString(), anyString());
         verify(confirmationTokenRepository, never()).save(any());
+        verify(recoveryPasswordTokenRepo, never()).save(any());
     }
 
     @Test
     public void testPasswordRecovery_userActivated_returnOk() {
         User user = new User("anna@gmail.com", "kjkjsdfsdfdf");
-        user.setEnabled(true);
+        user.setIsConfirmed(true);
+        RecoveryPasswordToken recoveryPasswordToken = new RecoveryPasswordToken(user);
         when(userRepository.findById(user.getEmail())).thenReturn(Optional.of(user));
 
         userService.createAndSendTokenForPassRecovery(user.getEmail());
 
         verify(userRepository, times(1)).findById(user.getEmail());
+        verify(confirmationTokenRepository, never()).findByUserEmailIgnoreCase(any());
+        verify(confirmationTokenRepository, never()).save(any());
         verify(emailSender, times(1)).send(anyString(), anyString(), anyString(), anyString());
-        verify(confirmationTokenRepository, times(1)).save(any());
+        verify(recoveryPasswordTokenRepo, times(1)).save(any(RecoveryPasswordToken.class));
     }
 
     @Test
@@ -143,29 +154,29 @@ class UserServiceTest {
         String token = "token";
         String password = "password";
 
-        when(confirmationTokenRepository.findByToken(token)).thenThrow(new TokenNotFoundException());
+        when(recoveryPasswordTokenRepo.findByToken(token)).thenThrow(new TokenNotFoundException());
         Exception exception = assertThrows(TokenNotFoundException.class, () -> userService.updatePassword(token, password));
 
         assertEquals("Please sign up.", exception.getMessage());
-        verify(confirmationTokenRepository, times(1)).findByToken(any());
+        verify(recoveryPasswordTokenRepo, times(1)).findByToken(any());
         verify(bCryptPasswordEncoder, never()).encode(any());
-        verify(confirmationTokenRepository, never()).deleteById(any());
+        verify(recoveryPasswordTokenRepo, never()).deleteById(any());
     }
 
     @Test
     public void testPasswordUpdate_validToken_returnOk() {
         User user = new User("anna@gmail.com", "kjkjsdfsdfdf");
-        user.setEnabled(true);
+        user.setIsConfirmed(true);
 
         String token = "token";
-        ConfirmationToken confirmationToken = new ConfirmationToken(user);
+        RecoveryPasswordToken recoveryPasswordToken = new RecoveryPasswordToken(user);
         String password = "password";
 
-        when(confirmationTokenRepository.findByToken(token)).thenReturn(Optional.of(confirmationToken));
+        when(recoveryPasswordTokenRepo.findByToken(token)).thenReturn(Optional.of(recoveryPasswordToken));
         userService.updatePassword(token, password);
 
-        verify(confirmationTokenRepository, times(1)).findByToken(anyString());
-        verify(bCryptPasswordEncoder, times(1)).encode(anyString());
-        verify(confirmationTokenRepository, times(1)).deleteById(any());
+        verify(recoveryPasswordTokenRepo, times(1)).findByToken(token);
+        verify(bCryptPasswordEncoder, times(1)).encode(password);
+        verify(recoveryPasswordTokenRepo, times(1)).deleteById(recoveryPasswordToken.getId());
     }
 }

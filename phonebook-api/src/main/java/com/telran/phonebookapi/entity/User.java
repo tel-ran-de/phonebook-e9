@@ -26,7 +26,7 @@ public class User {
     private UserRole userRole;
 
     @Setter
-    private Boolean enabled;
+    private Boolean isConfirmed;
 
     @Setter
     private String name;
@@ -35,13 +35,13 @@ public class User {
     private String lastName;
 
     @OneToMany(mappedBy = "user")
-    private List<Contact> contacts = new ArrayList<>();
+    private final List<Contact> contacts = new ArrayList<>();
 
     public User(String email, String password) {
         this.email = email;
         this.password = password;
         userRole = UserRole.USER;
-        enabled = false;
+        isConfirmed = false;
     }
 
     public List<Contact> getContact() {

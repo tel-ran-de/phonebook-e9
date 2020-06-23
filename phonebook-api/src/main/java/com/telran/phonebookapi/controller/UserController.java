@@ -2,18 +2,20 @@ package com.telran.phonebookapi.controller;
 
 import com.telran.phonebookapi.dto.UserDto;
 import com.telran.phonebookapi.service.UserService;
-import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@AllArgsConstructor
 @CrossOrigin
 @RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("/registration")
     public void create(@RequestBody @Valid UserDto userDto) {
