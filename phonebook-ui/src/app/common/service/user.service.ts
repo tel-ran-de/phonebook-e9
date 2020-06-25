@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core'
-import { HttpClient } from '@angular/common/http'
-import { Observable } from 'rxjs'
-import { User } from '../interface/user.interface'
+import {Injectable} from '@angular/core'
+import {HttpClient} from '@angular/common/http'
+import {Observable} from 'rxjs'
+import {User} from '../interface/user.interface'
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +20,10 @@ export class UserService {
   }
 
   recoveryPassword(user: User): Observable<User> {
-    return this.http.post<User>('/api/reset-password', user)
+    return this.http.post<User>('/api/user/reset-password', user)
   }
 
   resetPassword(user: User, token: string): Observable<User> {
-    return this.http.post<User>(`/api/reset-password?token=${token}`, user)
+    return this.http.put<User>(`/api/user/password?token=${token}`, user)
   }
-
 }

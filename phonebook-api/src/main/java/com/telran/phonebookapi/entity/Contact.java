@@ -33,10 +33,10 @@ public class Contact {
     private User user;
 
     @OneToMany(mappedBy = "contact")
-    private List<Phone> phoneNumbers = new ArrayList<>();
+    private final List<Phone> phoneNumbers = new ArrayList<>();
 
     @OneToMany(mappedBy = "contact")
-    private List<Address> addresses = new ArrayList<>();
+    private final List<Address> addresses = new ArrayList<>();
 
     @OneToMany(mappedBy = "contact")
     private List<Email> emails = new ArrayList<>();
