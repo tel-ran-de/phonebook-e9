@@ -9,8 +9,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Optional;
+import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -25,7 +26,7 @@ class IConfirmationTokenRepositoryTest {
     @Test
     public void testFindByToken_oneTokenInDb_oneFound() {
         User user = new User("anna@gmail.com", "sdfafdfdfrdf");
-        ConfirmationToken token = new ConfirmationToken(user);
+        ConfirmationToken token = new ConfirmationToken(user, tokenGenerate());
 
         entityManager.persist(user);
         entityManager.persist(token);
@@ -39,7 +40,7 @@ class IConfirmationTokenRepositoryTest {
     @Test
     public void testFindByToken_oneTokenInDb_notFound() {
         User user = new User("anna@gmail.com", "sdfafdfdfrdf");
-        ConfirmationToken token = new ConfirmationToken(user);
+        ConfirmationToken token = new ConfirmationToken(user, tokenGenerate());
 
         entityManager.persist(user);
         entityManager.persist(token);
@@ -48,5 +49,9 @@ class IConfirmationTokenRepositoryTest {
 
         Optional<ConfirmationToken> tokenFromDb = tokenRepository.findByToken("1500000");
         assertEquals(Optional.empty(), tokenFromDb);
+    }
+
+    private String tokenGenerate() {
+        return UUID.randomUUID().toString();
     }
 }

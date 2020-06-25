@@ -6,12 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class IRecoveryPasswordTokenRepoTest {
 
     @Autowired
@@ -23,7 +26,7 @@ class IRecoveryPasswordTokenRepoTest {
     @Test
     public void testFindByEmail_oneTokenInDb_notFound() {
         User user = new User("anna@gmail.com", "sdfafdfdfrdf");
-        RecoveryPasswordToken token = new RecoveryPasswordToken(user);
+        RecoveryPasswordToken token = new RecoveryPasswordToken(user, tokenGenerate());
 
         entityManager.persist(user);
         entityManager.persist(token);
@@ -37,7 +40,7 @@ class IRecoveryPasswordTokenRepoTest {
     @Test
     public void testFindByEmail_oneTokenInDb_oneFound() {
         User user = new User("anna@gmail.com", "sdfafdfdfrdf");
-        RecoveryPasswordToken token = new RecoveryPasswordToken(user);
+        RecoveryPasswordToken token = new RecoveryPasswordToken(user, tokenGenerate());
 
         entityManager.persist(user);
         entityManager.persist(token);
@@ -51,7 +54,7 @@ class IRecoveryPasswordTokenRepoTest {
     @Test
     public void testFindByEmailDifferentCase_oneTokenInDb_oneFound() {
         User user = new User("ANNA@gMail.coM", "sdfafdfdfrdf");
-        RecoveryPasswordToken token = new RecoveryPasswordToken(user);
+        RecoveryPasswordToken token = new RecoveryPasswordToken(user, tokenGenerate());
 
         entityManager.persist(user);
         entityManager.persist(token);
@@ -60,5 +63,9 @@ class IRecoveryPasswordTokenRepoTest {
 
         Optional<RecoveryPasswordToken> tokenFromDb = recoveryPasswordTokenRepo.findByUserEmailIgnoreCase("anna@gmAIL.COm");
         assertEquals(token.getToken(), tokenFromDb.get().getToken());
+    }
+
+    private String tokenGenerate() {
+        return UUID.randomUUID().toString();
     }
 }
