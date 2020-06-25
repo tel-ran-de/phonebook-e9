@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
@@ -23,10 +22,10 @@ public class ConfirmationToken {
     @OneToOne(targetEntity = User.class)
     private User user;
 
-    public ConfirmationToken(User user) {
+    public ConfirmationToken(User user, String token) {
         this.user = user;
         this.createdDate = LocalDateTime.now();
-        this.token = UUID.randomUUID().toString();
+        this.token = token;
     }
 }
 

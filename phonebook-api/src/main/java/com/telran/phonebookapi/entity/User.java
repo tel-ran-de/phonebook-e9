@@ -26,7 +26,7 @@ public class User {
     private UserRole userRole;
 
     @Setter
-    private Boolean isConfirmed;
+    private boolean isConfirmed;
 
     @Setter
     private String name;
@@ -35,7 +35,7 @@ public class User {
     private String lastName;
 
     @OneToMany(mappedBy = "user")
-    private final List<Contact> contacts = new ArrayList<>();
+    private List<Contact> contacts = new ArrayList<>();
 
     public User(String email, String password) {
         this.email = email;

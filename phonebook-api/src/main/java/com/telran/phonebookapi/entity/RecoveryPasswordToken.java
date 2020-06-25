@@ -2,14 +2,14 @@ package com.telran.phonebookapi.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
-@NoArgsConstructor
 @Entity
+@NoArgsConstructor
 public class RecoveryPasswordToken {
 
     @Id
@@ -23,10 +23,10 @@ public class RecoveryPasswordToken {
     @OneToOne(targetEntity = User.class)
     private User user;
 
-    public RecoveryPasswordToken(User user) {
+    public RecoveryPasswordToken(User user, String token) {
         this.user = user;
         this.createdDate = LocalDateTime.now();
-        this.token = UUID.randomUUID().toString();
+        this.token = token;
     }
 }
 
