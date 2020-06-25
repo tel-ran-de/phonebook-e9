@@ -173,7 +173,6 @@ class UserServiceTest {
     public void testPasswordRecovery_userActivated_returnOk() {
         User user = new User("anna@gmail.com", "kjkjsdfsdfdf");
         user.setConfirmed(true);
-        String tokenToSet = UUID.randomUUID().toString();
 
         when(userRepository.findById(user.getEmail())).thenReturn(Optional.of(user));
         userService.ourMail = "<email>";
