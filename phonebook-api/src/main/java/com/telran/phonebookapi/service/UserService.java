@@ -19,19 +19,12 @@ import java.util.UUID;
 
 @Service
 public class UserService {
+
     @Value("${our.mail}")
-    private String ourMail;
+    protected String ourMail;
 
     @Value("${host.ui}")
-    private String hostUi;
-
-    public String getOurMail() {
-        return ourMail;
-    }
-
-    public String getHostUi() {
-        return hostUi;
-    }
+    protected String hostUi;
 
     private static final String CONFIRM_REGISTRATION_MAIL_SUBJECT = "Mail Confirmation Link!";
     private static final String CONFIRM_REGISTRATION_MAIL_TEXT = "Thank you for your registration. Please click on the below link to activate your account. "
@@ -56,11 +49,12 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final EmailSender emailSender;
 
-    public UserService(IUserRepository userRepository,
-                       IConfirmationTokenRepository confirmationTokenRepository,
-                       IRecoveryPasswordTokenRepo recoveryPasswordTokenRepo,
-                       BCryptPasswordEncoder bCryptPasswordEncoder,
-                       EmailSender emailSender) {
+    public UserService(
+            IUserRepository userRepository,
+            IConfirmationTokenRepository confirmationTokenRepository,
+            IRecoveryPasswordTokenRepo recoveryPasswordTokenRepo,
+            BCryptPasswordEncoder bCryptPasswordEncoder,
+            EmailSender emailSender) {
         this.userRepository = userRepository;
         this.confirmationTokenRepository = confirmationTokenRepository;
         this.recoveryPasswordTokenRepo = recoveryPasswordTokenRepo;
