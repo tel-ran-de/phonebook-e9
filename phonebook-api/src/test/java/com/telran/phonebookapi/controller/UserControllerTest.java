@@ -104,7 +104,7 @@ class UserControllerTest {
     @Test
     public void testConfirm_validToken_returnsOk() throws Exception {
         User user = new User("anna@gmail.com", "dfdfdfgfgsr");
-        ConfirmationToken token = new ConfirmationToken(user,tokenGenerate());
+        ConfirmationToken token = new ConfirmationToken(user, UUID.randomUUID().toString());
 
         when(confirmationTokenRepository.findByToken("1500000"))
                 .thenReturn(Optional.of(token));
@@ -115,7 +115,25 @@ class UserControllerTest {
         verify(service, times(1)).confirmUser(any());
     }
 
-    private String tokenGenerate() {
-        return UUID.randomUUID().toString();
+    @Test
+    public void testDto_emailNull_result400() throws Exception {
+        mvc.perform(post("/api/user/registration")
+                .content("{\"password\":\"pegfhfhgfhfght\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        verify(service, never()).create(anyString(), anyString());
+    }
+
+    @Test
+    public void testDto_passwordNull_return400() throws Exception {
+        mvc.perform(post("/api/user/registration")
+                .content("{\"email\":\"valid.mail@gmail.com\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        verify(service, never()).create(anyString(), anyString());
     }
 }
