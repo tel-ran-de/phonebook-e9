@@ -20,5 +20,5 @@ spring.flyway.locations=classpath:db/migration
 spring.flyway.user=<username>
 spring.flyway.password=<password>
 
-host.ui=http://localhost:4200
-our.mail =our.mail@gmail.com
+com.telran.phonebookapi.ui.host=http://localhost:4200
+com.telran.phonebookapi.our.mail=our.mail@gmail.com

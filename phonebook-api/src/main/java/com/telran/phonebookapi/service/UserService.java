@@ -20,23 +20,26 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    @Value("${our.mail}")
+    @Value("${com.telran.phonebookapi.our.mail}")
     protected String ourMail;
 
-    @Value("${host.ui}")
+    @Value("${com.telran.phonebookapi.ui.host}")
     protected String hostUi;
+
+    private static final String CONFIRM_REGISTRATION_URL = "/user/activation/";
+    private static final String RECOVERY_PASS_URL = "/user/reset-password?token=";
 
     private static final String CONFIRM_REGISTRATION_MAIL_SUBJECT = "Mail Confirmation Link!";
     private static final String CONFIRM_REGISTRATION_MAIL_TEXT = "Thank you for your registration. Please click on the below link to activate your account. "
-            + "%s/user/activation/%s";
+            + "%s" + CONFIRM_REGISTRATION_URL + "%s";
 
     private static final String RESEND_REGISTRATION_CONFORMATION_MAIL_TEXT = "You have received this letter since requested password recovery.\n" +
             "Due to the fact that the account is still not activated, password recovery is not possible.\n" +
             "Follow the link to activate your account and go through the password recovery process.\n"
-            + "%s/user/activation/%s";
+            + "%s" + CONFIRM_REGISTRATION_URL + "%s";
 
     private static final String PASS_RECOVERY_MAIL_SUBJECT = "Password recovery";
-    private static final String UPDATE_PASSWORD_CONFIRM_MAIL_TEXT = "To recover your password, follow the link " + "%s/user/reset-password?token=%s";
+    private static final String UPDATE_PASSWORD_CONFIRM_MAIL_TEXT = "To recover your password, follow the link " + "%s" + RECOVERY_PASS_URL + "%s";
 
     private static final String TOKEN_NOT_FOUND = "Please sign up.";
     private static final String USER_NOT_FOUND = "User not found";
@@ -72,7 +75,7 @@ public class UserService {
             User user = new User(email.toLowerCase(), encryptedPassword);
             userRepository.save(user);
 
-            final ConfirmationToken confirmationToken = new ConfirmationToken(user, tokenGenerate());
+            final ConfirmationToken confirmationToken = new ConfirmationToken(user, UUID.randomUUID().toString());
             confirmationTokenRepository.save(confirmationToken);
 
             emailSender.send(user.getEmail(), CONFIRM_REGISTRATION_MAIL_SUBJECT, ourMail, String.format(CONFIRM_REGISTRATION_MAIL_TEXT, hostUi, confirmationToken.getToken()));
@@ -100,7 +103,7 @@ public class UserService {
             emailSender.send(user.getEmail(), PASS_RECOVERY_MAIL_SUBJECT, ourMail, String.format(RESEND_REGISTRATION_CONFORMATION_MAIL_TEXT, hostUi, confirmationToken.getToken()));
             throw new UserNotActivatedException(USER_NOT_ACTIVATED);
         } else {
-            RecoveryPasswordToken recoveryPasswordToken = new RecoveryPasswordToken(user, tokenGenerate());
+            RecoveryPasswordToken recoveryPasswordToken = new RecoveryPasswordToken(user, UUID.randomUUID().toString());
             recoveryPasswordTokenRepo.save(recoveryPasswordToken);
 
             emailSender.send(user.getEmail(), PASS_RECOVERY_MAIL_SUBJECT, ourMail, String.format(UPDATE_PASSWORD_CONFIRM_MAIL_TEXT, hostUi, recoveryPasswordToken.getToken()));
@@ -115,9 +118,5 @@ public class UserService {
         user.setPassword(encryptedPassword);
 
         recoveryPasswordTokenRepo.deleteById(recoveryPasswordToken.getId());
-    }
-
-    private String tokenGenerate() {
-        return UUID.randomUUID().toString();
     }
 }

@@ -1,6 +1,8 @@
 package com.telran.phonebookapi.controller;
 
-import com.telran.phonebookapi.dto.UserDto;
+import com.telran.phonebookapi.dto.UserRegisterDto;
+import com.telran.phonebookapi.dto.UserResetPassDto;
+import com.telran.phonebookapi.dto.UserResetPassEmailDto;
 import com.telran.phonebookapi.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +20,8 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public void create(@RequestBody @Valid UserDto userDto) {
-        userService.create(userDto.email, userDto.password);
+    public void create(@RequestBody @Valid UserRegisterDto userRegisterDto) {
+        userService.create(userRegisterDto.email, userRegisterDto.password);
     }
 
     @GetMapping("/confirmation")
@@ -28,12 +30,12 @@ public class UserController {
     }
 
     @PostMapping("/reset-password")
-    public void confirmUpdatePass(@RequestBody @Valid UserDto userDto) {
-        userService.createAndSendTokenForPassRecovery(userDto.email);
+    public void confirmUpdatePass(@RequestBody @Valid UserResetPassEmailDto USerResetPassEmailDto) {
+        userService.createAndSendTokenForPassRecovery(USerResetPassEmailDto.email);
     }
 
     @PutMapping("/password")
-    public void updatePass(@RequestBody @Valid UserDto userDto, @RequestParam(value = "token") String token) {
-        userService.updatePassword(token, userDto.password);
+    public void updatePass(@RequestBody @Valid UserResetPassDto passwordDto, @RequestParam(value = "token") String token) {
+        userService.updatePassword(token, passwordDto.password);
     }
 }
