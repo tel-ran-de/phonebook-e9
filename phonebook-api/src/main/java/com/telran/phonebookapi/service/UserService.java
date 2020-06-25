@@ -1,16 +1,21 @@
 package com.telran.phonebookapi.service;
 
+import com.telran.phonebookapi.dto.LoginResponseDto;
 import com.telran.phonebookapi.entity.ConfirmationToken;
 import com.telran.phonebookapi.entity.User;
+import com.telran.phonebookapi.entity.UserSession;
+import com.telran.phonebookapi.exception.AuthenticationException;
 import com.telran.phonebookapi.exception.TokenNotFoundException;
 import com.telran.phonebookapi.exception.UserAlreadyExistsException;
 import com.telran.phonebookapi.persistence.IConfirmationTokenRepository;
 import com.telran.phonebookapi.persistence.IUserRepository;
+import com.telran.phonebookapi.persistence.UserSessionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -24,6 +29,7 @@ public class UserService {
     private final IConfirmationTokenRepository confirmationTokenRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final EmailSender emailSender;
+    private final UserSessionRepository userSessionRepository;
 
     public void create(String email, String password) {
         final Optional<User> optionalUser = userRepository.findById(email.toLowerCase());
@@ -43,7 +49,7 @@ public class UserService {
         }
     }
 
-    public void confirmUser(String  token) {
+    public void confirmUser(String token) {
         ConfirmationToken confirmationToken = confirmationTokenRepository.findByToken(token).orElseThrow(TokenNotFoundException::new);
 
         final User user = confirmationToken.getUser();
@@ -51,5 +57,22 @@ public class UserService {
         userRepository.save(user);
 
         confirmationTokenRepository.deleteById(confirmationToken.getId());
+    }
+
+    public LoginResponseDto login(String email, String password) {
+        User user = userRepository.findByEmailAndEnabledIsTrue(email.toLowerCase()).orElseThrow(AuthenticationException::new);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (!encoder.matches(password, user.getPassword()))
+            throw new AuthenticationException();
+
+        UserSession userSession = UserSession.builder()
+                .accessToken(UUID.randomUUID().toString())
+                .refreshToken(UUID.randomUUID().toString())
+                .user(user)
+                .isValid(true)
+                .build();
+
+        userSessionRepository.save(userSession);
+        return new LoginResponseDto(userSession.getAccessToken(), userSession.getRefreshToken());
     }
 }

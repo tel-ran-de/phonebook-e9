@@ -24,4 +24,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ErrorDto handleTokenNotFound(TokenNotFoundException ex) {
         return new ErrorDto(ex.getMessage());
     }
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorDto handleAuthenticationError(AuthenticationException ex) {
+        return new ErrorDto(ex.getMessage());
+    }
 }
