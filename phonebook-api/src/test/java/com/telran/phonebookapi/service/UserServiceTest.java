@@ -213,16 +213,15 @@ class UserServiceTest {
         User user = new User("anna@gmail.com", "kjkjsdfsdfdf");
         user.setConfirmed(true);
 
-        String token = "token";
         String tokenToSet = UUID.randomUUID().toString();
         RecoveryPasswordToken recoveryPasswordToken = new RecoveryPasswordToken(user, tokenToSet);
         String password = "password";
 
-        when(recoveryPasswordTokenRepo.findByToken(token)).thenReturn(Optional.of(recoveryPasswordToken));
+        when(recoveryPasswordTokenRepo.findByToken(tokenToSet)).thenReturn(Optional.of(recoveryPasswordToken));
 
-        userService.updatePassword(token, password);
+        userService.updatePassword(tokenToSet, password);
 
-        verify(recoveryPasswordTokenRepo, times(1)).findByToken(token);
+        verify(recoveryPasswordTokenRepo, times(1)).findByToken(tokenToSet);
         verify(bCryptPasswordEncoder, times(1)).encode(password);
         verify(recoveryPasswordTokenRepo, times(1)).deleteById(recoveryPasswordToken.getId());
         verify(emailSender, never()).send(anyString(), anyString(), anyString(), anyString());
