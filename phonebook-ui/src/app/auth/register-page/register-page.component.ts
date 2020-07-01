@@ -64,17 +64,17 @@ export class RegisterPageComponent implements OnInit, OnDestroy {
       .subscribe(_ => this.router.navigate(['../pending'], {relativeTo: this.route}),
         error => {
           this.loading = false;
-          this.errorMessage = errorHandler(error);
+          this.errorMessage = this.getErrorMessage(error);
         });
+  }
 
-    function errorHandler(error: any) {
-      let message;
-      if (error.status === 0)
-        message = `Error Code: ${error.status}\n. Server unavailable, try again later`;
-      else
-        message = `Error Code: ${error.status}\n. ${error.error.message}`;
-      return message
-    }
+  getErrorMessage(error: any) {
+    let message;
+    if (error.status === 0)
+      message = 'Server unavailable, try again later';
+    else
+      message = error.error.message;
+    return message;
   }
 
   checkPasswords(group: FormGroup) {

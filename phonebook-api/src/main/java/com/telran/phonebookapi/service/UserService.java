@@ -41,7 +41,7 @@ public class UserService {
     private static final String PASS_RECOVERY_MAIL_SUBJECT = "Password recovery";
     private static final String UPDATE_PASSWORD_CONFIRM_MAIL_TEXT = "To recover your password, follow the link " + "%s" + RECOVERY_PASS_URL + "%s";
 
-    private static final String TOKEN_NOT_FOUND = "Please sign up.";
+    private static final String TOKEN_NOT_FOUND = "Link expired";
     private static final String USER_NOT_FOUND = "User not found";
     private static final String USER_NOT_ACTIVATED = "User not Activated";
     private static final String USER_ALREADY_EXISTS = "User with email: %s already exists.";
