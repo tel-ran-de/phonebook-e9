@@ -128,7 +128,7 @@ class UserServiceTest {
 
         Exception exception = assertThrows(TokenNotFoundException.class, () -> userService.createAndSendTokenForPassRecovery(user.getEmail()));
 
-        assertEquals("Please sign up.", exception.getMessage());
+        assertEquals("Link expired", exception.getMessage());
         verify(userRepository, times(1)).findById(user.getEmail());
         verify(confirmationTokenRepository, times(1)).findByUserEmailIgnoreCase(user.getEmail());
 

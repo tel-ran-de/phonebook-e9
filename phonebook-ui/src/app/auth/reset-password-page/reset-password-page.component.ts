@@ -24,6 +24,7 @@ export class ResetPasswordPageComponent implements OnInit {
   message: string = this.authMessages.INVALID_PASSWORD
   classes: string = 'auth-form animate__animated animate__zoomIn'
   passwordMustMatch: string = this.authMessages.PASSWORDS_MUST_MATCH
+  errorMessage: string;
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -44,12 +45,22 @@ export class ResetPasswordPageComponent implements OnInit {
       this.userService.resetPassword(this.form.value, this.route.snapshot.queryParams.token).subscribe(
         () => this.router.navigate(['/user/reset-password-info']),
         error => {
+          this.errorMessage = this.getErrorMessage(error)
           this.classes = 'auth-form  animate__animated animate__wobble'
           this.form.reset()
           this.form.enable()
         }
       )
     }
+    this.classes = 'auth-form animate__animated'
   }
 
+  getErrorMessage(error: any) {
+    let message;
+    if (error.status === 0)
+      message = 'Server unavailable, try again later';
+    else
+      message = error.error.message;
+    return message;
+  }
 }
