@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import {Component, OnDestroy, OnInit} from '@angular/core'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import { Router } from '@angular/router'
@@ -10,7 +10,7 @@ import { UserService } from '../../common/service/user.service'
   templateUrl: './forgot-password-page.component.html',
   styleUrls: ['./forgot-password-page.component.css']
 })
-export class ForgotPasswordPageComponent implements OnInit {
+export class ForgotPasswordPageComponent implements OnInit, OnDestroy {
 
   constructor(private authMessages: AuthMessage,
               private userService: UserService,
@@ -23,12 +23,15 @@ export class ForgotPasswordPageComponent implements OnInit {
   classes: string = 'auth-form animate__animated animate__zoomIn'
 
   passwordRecoveryError: boolean = false
-  passwordRecoveryErrorMessage: string = this.authMessages.EMAIL_WAS_NOT_FOUND
+  passwordRecoveryErrorMessage: string
   emailValidationErrorMessage: string = this.authMessages.INVALID_EMAIL_ADDRESS
 
   ngOnInit(): void {
+    console.log(30)
     this.form = new FormGroup({
-      email: new FormControl(null, [Validators.required, Validators.email])
+      email: new FormControl(null, [
+        Validators.required,
+        Validators.pattern("^[a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,10}$")])
     })
   }
 
@@ -45,15 +48,23 @@ export class ForgotPasswordPageComponent implements OnInit {
         () => this.router.navigate(['/user/forgot-password-info']),
         error => {
           this.passwordRecoveryError = true
-          this.passwordRecoveryErrorMessage = this.authMessages.EMAIL_WAS_NOT_FOUND
+          this.passwordRecoveryErrorMessage = this.getErrorMessage(error)
           this.classes = 'auth-form animate__animated animate__wobble'
           this.form.reset()
           this.form.enable()
         }
       )
+      this.classes = 'auth-form animate__animated'
     }
   }
 
-
+  getErrorMessage(error: any) {
+    let message;
+    if (error.status === 0)
+      message = 'Server unavailable, try again later';
+    else
+      message = error.error.message;
+    return message;
+  }
 }
 
