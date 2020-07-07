@@ -17,10 +17,5 @@ public class PhonebookApiApplication {
         SpringApplication.run(PhonebookApiApplication.class, args);
     }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 }
 

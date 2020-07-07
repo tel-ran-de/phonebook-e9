@@ -1,50 +1,56 @@
 package com.telran.phonebookapi.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.telran.phonebookapi.entity.User;
+import com.telran.phonebookapi.dto.UserRegisterDto;
 import com.telran.phonebookapi.service.JWTUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
-public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+    private final AuthenticationManager authenticationManager;
+    private final ObjectMapper objectMapper;
+    private final JWTUtil jwtUtil;
 
     @Value("${com.telran.auth.jwt.secret}")
     String jwtSecret;
 
-    private AuthenticationManager authenticationManager;
-    private JWTUtil jwtUtil;
-
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
+    public JWTAuthenticationFilter(
+            AuthenticationManager authenticationManager,
+            ObjectMapper objectMapper, JWTUtil jwtUtil) {
+        super(new AntPathRequestMatcher("/api/user/login", "POST"));
         this.authenticationManager = authenticationManager;
+        this.objectMapper = objectMapper;
         this.jwtUtil = jwtUtil;
     }
 
-   @Override
+    @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
-                                                HttpServletResponse res) throws AuthenticationException {
+                                                HttpServletResponse res)
+            throws AuthenticationException {
         try {
-            User user = new ObjectMapper()
-                    .readValue(req.getInputStream(), User.class);
+            UserRegisterDto userDto = objectMapper.readValue(req.getInputStream(), UserRegisterDto.class);
 
-            return authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            user.getEmail(),
-                            user.getPassword()
-                    ));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            Authentication auth = new UsernamePasswordAuthenticationToken(
+                    userDto.email,
+                    userDto.password
+            );
+
+            return authenticationManager.authenticate(auth);
+        } catch (IOException ignored) {
         }
+        return null;
     }
 
     @Override
@@ -52,6 +58,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse res,
                                             FilterChain chain,
                                             Authentication auth) {
-        String accessToken = jwtUtil.generateAccessToken(((User) auth.getPrincipal()).getEmail());
+
+        String accessToken = jwtUtil.generateAccessToken(((User) auth.getPrincipal()).getUsername());
+
+        Cookie cookie = new Cookie("at", accessToken);
+        cookie.setHttpOnly(true);
+        res.addCookie(cookie);
+
+        //        res.addHeader("Authorization", "Bearer " + token);
     }
 }
+
+

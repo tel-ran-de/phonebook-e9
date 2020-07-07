@@ -1,11 +1,9 @@
 package com.telran.phonebookapi.controller;
 
-import com.telran.phonebookapi.config.AuthRequest;
 import com.telran.phonebookapi.dto.UserRegisterDto;
 import com.telran.phonebookapi.dto.UserResetPassDto;
 import com.telran.phonebookapi.dto.UserResetPassEmailDto;
 import com.telran.phonebookapi.service.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -41,10 +39,5 @@ public class UserController {
         userService.updatePassword(token, passwordDto.password);
     }
 
-    @PostMapping("/login")
-    @ResponseStatus(HttpStatus.OK)
-    public void login(@RequestBody AuthRequest authRequest) {
-        userService.login(authRequest.getEmail(), authRequest.getPassword());
-    }
 }
 
