@@ -28,4 +28,5 @@ public class AddressDto {
         this.type = type;
         this.contactId = contactId;
     }
+
 }

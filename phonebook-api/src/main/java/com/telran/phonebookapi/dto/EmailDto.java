@@ -19,4 +19,5 @@ public class EmailDto {
         this.type = type;
         this.contactId = contactId;
     }
+
 }

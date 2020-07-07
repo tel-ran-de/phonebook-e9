@@ -32,4 +32,5 @@ public class EmailController {
     public void removeById(@PathVariable int id){
         emailService.removeById(id);
     }
+
 }

@@ -23,4 +23,5 @@ public class PhoneDto {
         this.type = type;
         this.contactId = contactId;
     }
+
 }

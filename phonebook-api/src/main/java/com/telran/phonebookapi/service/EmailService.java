@@ -43,4 +43,5 @@ public class EmailService {
         emailRepo.findById(id).orElseThrow(() -> new EntityNotFoundException(EMAIL_NOT_FOUND));
         emailRepo.deleteById(id);
     }
+
 }
