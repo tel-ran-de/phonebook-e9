@@ -44,5 +44,4 @@ public class PhoneService {
         iPhoneRepo.findById(id).orElseThrow(() -> new EntityNotFoundException(PHONE_NOT_FOUND));
         iPhoneRepo.deleteById(id);
     }
-    
 }

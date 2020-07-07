@@ -40,5 +40,4 @@ public class Address {
         this.contact = contact;
         this.type = type;
     }
-
 }

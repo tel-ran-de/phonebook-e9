@@ -32,5 +32,4 @@ public class AddressController {
     public void removeById(@PathVariable int id){
         addressService.removeById(id);
     }
-
 }

@@ -48,5 +48,4 @@ public class AddressService {
         addressRepo.findById(id).orElseThrow(() -> new EntityNotFoundException(ADDRESS_NOT_FOUND));
         addressRepo.deleteById(id);
     }
-
 }

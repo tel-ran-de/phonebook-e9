@@ -32,5 +32,4 @@ public class PhoneController {
     public void removeById(@PathVariable int id){
         phoneService.removeById(id);
     }
-
 }
