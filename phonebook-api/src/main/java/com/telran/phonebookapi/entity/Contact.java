@@ -41,10 +41,11 @@ public class Contact {
     @OneToMany(mappedBy = "contact")
     private List<Email> emails = new ArrayList<>();
 
-    public Contact(String name, String lastName, User user) {
+    public Contact(String name, String lastName, ContactType type, User user) {
         this.name = name;
         this.lastName = lastName;
         this.user = user;
+        this.type = type;
     }
 
     public List<Phone> getPhoneNumbers() {
