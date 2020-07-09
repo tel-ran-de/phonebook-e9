@@ -31,7 +31,8 @@ public class ContactService {
 
     public void addContact(ContactDto contactDto){
         User user = userRepo.findById(contactDto.userId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
-        Contact contact = new Contact(contactDto.name, contactDto.lastName, contactDto.type, user);
+        Contact contact = new Contact(contactDto.name, contactDto.lastName, user);
+        contact.setType(contactDto.type);
         contactRepo.save(contact);
     }
 
@@ -40,18 +41,25 @@ public class ContactService {
         ContactDto contactDto = new ContactDto(contact.getId(), contact.getName(), contact.getLastName(),
                 contact.getType(), contact.getUser().getEmail());
 
-//        contactDto.addresses = contact.getAddresses().stream()
-//                .map(address -> new AddressDto(address.getId(), address.getZipCode(), address.getCity(),
-//                        address.getCountry(), address.getType(), address.getContact().getId()))
-//                .collect(Collectors.toList());
-//
-//        contactDto.emails = contact.getEmails().stream()
-//                .map(email -> new EmailDto(email.getId(), email.getEmail(), email.getType(), email.getContact().getId()))
-//                .collect(Collectors.toList());
-//
-//        contactDto.phones = contact.getPhoneNumbers().stream()
-//                .map(phone -> new PhoneDto(phone.getId(), phone.getNumber(), phone.getCodeCountry(), phone.getType(), phone.getContact().getId()))
-//                .collect(Collectors.toList());
+        return contactDto;
+    }
+    public ContactDto getByIdFullDetails(int id){
+        Contact contact = contactRepo.findById(id).orElseThrow(() -> new EntityNotFoundException(CONTACT_NOT_FOUND));
+        ContactDto contactDto = new ContactDto(contact.getId(), contact.getName(), contact.getLastName(),
+                contact.getType(), contact.getUser().getEmail());
+
+        contactDto.addresses = contact.getAddresses().stream()
+                .map(address -> new AddressDto(address.getId(), address.getZipCode(), address.getCity(),
+                        address.getCountry(), address.getAddress(), address.getType(),  address.getContact().getId()))
+                .collect(Collectors.toList());
+
+        contactDto.emails = contact.getEmails().stream()
+                .map(email -> new EmailDto(email.getId(), email.getEmail(), email.getType(), email.getContact().getId()))
+                .collect(Collectors.toList());
+
+        contactDto.phones = contact.getPhoneNumbers().stream()
+                .map(phone -> new PhoneDto(phone.getId(), phone.getNumber(), phone.getCodeCountry(), phone.getType(), phone.getContact().getId()))
+                .collect(Collectors.toList());
 
         return contactDto;
     }
@@ -60,6 +68,7 @@ public class ContactService {
         Contact contact = contactRepo.findById(contactDto.id).orElseThrow(() -> new EntityNotFoundException(CONTACT_NOT_FOUND));
         contact.setName(contactDto.name);
         contact.setLastName(contactDto.lastName);
+        contact.setType(contactDto.type);
         contactRepo.save(contact);
     }
 

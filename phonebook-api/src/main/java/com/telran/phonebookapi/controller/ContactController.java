@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/api")
 public class ContactController {
 
     ContactService contactService;
@@ -24,6 +25,11 @@ public class ContactController {
     @GetMapping("/contact/{id}")
     public ContactDto getById (@PathVariable int id){
         return contactService.getById(id);
+    }
+
+    @GetMapping("/contactFull/{id}")
+    public ContactDto getByIdFullDetails (@PathVariable int id){
+        return contactService.getByIdFullDetails(id);
     }
 
     @PutMapping("/contact")
