@@ -3,6 +3,7 @@ package com.telran.phonebookapi.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.DefaultClaims;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -20,27 +21,23 @@ public class JWTUtil {
 
     public String generateAccessToken(String email) {
         Date date = Date.from(LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-        String accessToken = Jwts.builder()
+        Claims claims = new DefaultClaims();
+        claims.put("username", email);
+
+        return Jwts.builder()
+                .setClaims(claims)
                 .setExpiration(date)
-                .setHeaderParam("username", email)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes(StandardCharsets.UTF_8))
                 .compact();
-        return accessToken;
     }
 
     public String generateRefreshToken(String email) {
         Date date = Date.from(LocalDate.now().plusDays(10).atStartOfDay(ZoneId.systemDefault()).toInstant());
-        String refreshToken = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(email)
                 .setExpiration(date)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
-        return refreshToken;
-    }
-
-    public String getEmailFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-        return claims.getSubject();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
@@ -52,14 +49,21 @@ public class JWTUtil {
         return extractExpiration(token).before(new Date());
     }
 
+
     private Date extractExpiration(String token) {
-        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+        Claims claims = parseToken(token);
         return claims.getExpiration();
     }
 
+    Claims parseToken(String token) {
+        return Jwts
+                .parser()
+                .setSigningKey(jwtSecret.getBytes(StandardCharsets.UTF_8))
+                .parseClaimsJws(token).getBody();
+    }
+
     public String extractUsername(String token) {
-        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-        return claims.getSubject();
+        return parseToken(token).get("username", String.class);
     }
 }
 

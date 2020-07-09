@@ -23,9 +23,6 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
     private final ObjectMapper objectMapper;
     private final JWTUtil jwtUtil;
 
-    @Value("${com.telran.auth.jwt.secret}")
-    String jwtSecret;
-
     public JWTAuthenticationFilter(
             AuthenticationManager authenticationManager,
             ObjectMapper objectMapper, JWTUtil jwtUtil) {
@@ -65,7 +62,7 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
         cookie.setHttpOnly(true);
         res.addCookie(cookie);
 
-        //        res.addHeader("Authorization", "Bearer " + token);
+//        res.addHeader("Authorization", "Bearer " + accessToken);
     }
 }
 
