@@ -23,7 +23,10 @@ public class AddressService {
 
     public void addAddress(AddressDto addressDto){
         Contact contact = contactRepo.findById(addressDto.contactId).orElseThrow(() -> new EntityNotFoundException(CONTACT_NOT_FOUND));
-        Address address = new Address(addressDto.address, addressDto.country, addressDto.city, addressDto.zipCode, addressDto.type, contact);
+        Address address = new Address(addressDto.address, addressDto.city, contact);
+        address.setCountry(addressDto.country);
+        address.setZipCode(addressDto.zipCode);
+        address.setType(addressDto.type);
         addressRepo.save(address);
     }
 

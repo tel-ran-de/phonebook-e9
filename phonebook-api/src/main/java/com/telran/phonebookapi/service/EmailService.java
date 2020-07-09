@@ -22,7 +22,8 @@ public class EmailService {
 
     public void addEmail(EmailDto emailDto){
         Contact contact = contactRepo.findById(emailDto.contactId).orElseThrow(() -> new EntityNotFoundException(CONTACT_NOT_FOUND));
-        Email email = new Email(contact, emailDto.email, emailDto.type);
+        Email email = new Email(contact, emailDto.email);
+        email.setType(emailDto.type);
         emailRepo.save(email);
     }
 

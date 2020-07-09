@@ -22,7 +22,9 @@ public class PhoneService {
 
     public void addPhone(PhoneDto phoneDto){
         Contact contact = contactRepo.findById(phoneDto.contactId).orElseThrow(() -> new EntityNotFoundException(CONTACT_NOT_FOUND));
-        Phone phone = new Phone(contact, phoneDto.codeCountry, phoneDto.number, phoneDto.type);
+        Phone phone = new Phone(contact, phoneDto.number);
+        phone.setCodeCountry(phoneDto.codeCountry);
+        phone.setType(phoneDto.type);
         iPhoneRepo.save(phone);
     }
 

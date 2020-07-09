@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/api")
 public class EmailController {
 
     EmailService emailService;

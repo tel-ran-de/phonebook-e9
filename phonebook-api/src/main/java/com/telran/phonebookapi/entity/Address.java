@@ -32,12 +32,9 @@ public class Address {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Contact contact;
 
-    public Address(String address, String country, String city, int zipCode, AddressType type, Contact contact) {
+    public Address(String address, String city, Contact contact) {
         this.address = address;
-        this.country = country;
         this.city = city;
-        this.zipCode = zipCode;
         this.contact = contact;
-        this.type = type;
     }
 }
