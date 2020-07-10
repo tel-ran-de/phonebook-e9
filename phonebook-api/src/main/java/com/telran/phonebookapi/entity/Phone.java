@@ -28,10 +28,8 @@ public class Phone {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Contact contact;
 
-    public Phone(Contact contact, CountryCode codeCountry, String number, PhoneType type) {
+    public Phone(Contact contact, String number) {
         this.contact = contact;
-        this.codeCountry = codeCountry;
         this.number = number;
-        this.type = type;
     }
 }

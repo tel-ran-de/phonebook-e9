@@ -26,9 +26,8 @@ public class Email {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Contact contact;
 
-    public Email(Contact contact, String email, EmailType type) {
+    public Email(Contact contact, String email) {
         this.contact = contact;
         this.email = email;
-        this.type = type;
     }
 }
