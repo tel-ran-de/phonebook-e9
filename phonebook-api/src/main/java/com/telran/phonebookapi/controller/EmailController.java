@@ -6,7 +6,7 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api")
+@RequestMapping("/api/email")
 public class EmailController {
 
     EmailService emailService;
@@ -14,22 +14,22 @@ public class EmailController {
         this.emailService = emailService;
     }
 
-    @PostMapping("/email")
+    @PostMapping("")
     public void create(@RequestBody @Valid EmailDto emailDto){
         emailService.addEmail(emailDto);
     }
 
-    @GetMapping("/email/{id}")
+    @GetMapping("/{id}")
     public EmailDto getById (@PathVariable int id){
         return emailService.getById(id);
     }
 
-    @PutMapping("/email")
+    @PutMapping("")
     public void edit (@RequestBody @Valid EmailDto emailDto){
         emailService.edit(emailDto);
     }
 
-    @DeleteMapping("/email/{id}")
+    @DeleteMapping("/{id}")
     public void removeById(@PathVariable int id){
         emailService.removeById(id);
     }

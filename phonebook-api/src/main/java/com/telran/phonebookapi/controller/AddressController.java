@@ -6,7 +6,7 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api")
+@RequestMapping("/api/address")
 public class AddressController {
 
     AddressService addressService;
@@ -14,22 +14,22 @@ public class AddressController {
         this.addressService = addressService;
     }
 
-    @PostMapping("/address")
+    @PostMapping("")
     public void create(@RequestBody @Valid AddressDto addressDto){
         addressService.addAddress(addressDto);
     }
 
-    @GetMapping("/address/{id}")
+    @GetMapping("/{id}")
     public AddressDto getById (@PathVariable int id){
         return addressService.getById(id);
     }
 
-    @PutMapping("/address")
+    @PutMapping("")
     public void edit (@RequestBody @Valid AddressDto addressDto){
         addressService.edit(addressDto);
     }
 
-    @DeleteMapping("address/{id}")
+    @DeleteMapping("/{id}")
     public void removeById(@PathVariable int id){
         addressService.removeById(id);
     }

@@ -6,7 +6,7 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api")
+@RequestMapping("/api/phone")
 public class PhoneController {
 
     PhoneService phoneService;
@@ -14,22 +14,22 @@ public class PhoneController {
         this.phoneService = phoneService;
     }
 
-    @PostMapping("/phone")
+    @PostMapping("")
     public void create(@RequestBody @Valid PhoneDto phoneDto){
         phoneService.addPhone(phoneDto);
     }
 
-    @GetMapping("/phone/{id}")
+    @GetMapping("/{id}")
     public PhoneDto getById (@PathVariable int id){
         return phoneService.getById(id);
     }
 
-    @PutMapping("/phone")
+    @PutMapping("")
     public void edit (@RequestBody @Valid PhoneDto phoneDto){
         phoneService.edit(phoneDto);
     }
 
-    @DeleteMapping("/phone/{id}")
+    @DeleteMapping("/{id}")
     public void removeById(@PathVariable int id){
         phoneService.removeById(id);
     }
