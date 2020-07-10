@@ -8,7 +8,7 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api")
+@RequestMapping("/api/contact")
 public class ContactController {
 
     ContactService contactService;
@@ -17,27 +17,27 @@ public class ContactController {
         this.contactService = contactService;
     }
 
-    @PostMapping("/contact")
+    @PostMapping("")
     public void create(@RequestBody @Valid ContactDto contactDto){
         contactService.addContact(contactDto);
     }
 
-    @GetMapping("/contact/{id}")
+    @GetMapping("/{id}")
     public ContactDto getById (@PathVariable int id){
         return contactService.getById(id);
     }
 
-    @GetMapping("/contactFull/{id}")
+    @GetMapping("/{id}/extended")
     public ContactDto getByIdFullDetails (@PathVariable int id){
         return contactService.getByIdFullDetails(id);
     }
 
-    @PutMapping("/contact")
+    @PutMapping("")
     public void edit (@RequestBody @Valid ContactDto contactDto){
         contactService.edit(contactDto);
     }
 
-    @DeleteMapping("contact/{id}")
+    @DeleteMapping("/{id}")
     public void removeById(@PathVariable int id){
         contactService.removeById(id);
     }
