@@ -22,3 +22,4 @@ spring.flyway.password=<password>
 
 com.telran.phonebookapi.ui.host=http://localhost:4200
 com.telran.phonebookapi.our.mail=our.mail@gmail.com
+com.telran.auth.jwt.secret=<secret word>

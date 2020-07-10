@@ -1,5 +1,6 @@
 package com.telran.phonebookapi.service;
 
+import com.telran.phonebookapi.config.AuthResponse;
 import com.telran.phonebookapi.entity.ConfirmationToken;
 import com.telran.phonebookapi.entity.RecoveryPasswordToken;
 import com.telran.phonebookapi.entity.User;
@@ -11,14 +12,17 @@ import com.telran.phonebookapi.persistence.IConfirmationTokenRepository;
 import com.telran.phonebookapi.persistence.IRecoveryPasswordTokenRepo;
 import com.telran.phonebookapi.persistence.IUserRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class UserService {
+
 
     @Value("${com.telran.phonebookapi.our.mail}")
     protected String ourMail;
@@ -51,18 +55,20 @@ public class UserService {
     private final IRecoveryPasswordTokenRepo recoveryPasswordTokenRepo;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final EmailSender emailSender;
+    private JWTUtil jwtTokenUtil;
 
     public UserService(
             IUserRepository userRepository,
             IConfirmationTokenRepository confirmationTokenRepository,
             IRecoveryPasswordTokenRepo recoveryPasswordTokenRepo,
             BCryptPasswordEncoder bCryptPasswordEncoder,
-            EmailSender emailSender) {
+            EmailSender emailSender, JWTUtil jwtTokenUtil) {
         this.userRepository = userRepository;
         this.confirmationTokenRepository = confirmationTokenRepository;
         this.recoveryPasswordTokenRepo = recoveryPasswordTokenRepo;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.emailSender = emailSender;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     public void create(String email, String password) {
@@ -118,5 +124,20 @@ public class UserService {
         user.setPassword(encryptedPassword);
 
         recoveryPasswordTokenRepo.deleteById(recoveryPasswordToken.getId());
+    }
+
+    public void login(String email, String password) {
+        final Optional<User> optionalUser = userRepository.findById(email.toLowerCase());
+        if (optionalUser.isPresent()) {
+            final String encryptedPassword = bCryptPasswordEncoder.encode(password);
+         if (encryptedPassword.equals(optionalUser.get().getPassword())) {
+                String jwtAccess = jwtTokenUtil.generateAccessToken(email);
+            } else {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Имя или пароль неправильны");
+            }
+        } else {
+            throw new UserNotFoundException(String.format(USER_NOT_FOUND, email));
+
+        }
     }
 }
