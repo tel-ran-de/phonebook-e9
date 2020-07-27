@@ -26,6 +26,7 @@ public class Contact {
     @Setter
     private String lastName;
 
+    @Setter
     private ContactType type;
 
     @ManyToOne
@@ -39,7 +40,7 @@ public class Contact {
     private final List<Address> addresses = new ArrayList<>();
 
     @OneToMany(mappedBy = "contact")
-    private List<Email> emails = new ArrayList<>();
+    private final List<Email> emails = new ArrayList<>();
 
     public Contact(String name, String lastName, User user) {
         this.name = name;
